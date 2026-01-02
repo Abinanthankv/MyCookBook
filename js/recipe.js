@@ -266,22 +266,24 @@ function renderRecipeHero(recipe) {
         });
     }
 
-    // Populate nutrition data (use recipe data or defaults)
-    const nutrition = recipe.nutrition || {
-        calories: '~350',
-        carbs: '45g',
-        fat: '12g',
-        protein: '18g'
-    };
-    const nutritionCalories = document.getElementById('nutritionCalories');
-    const nutritionCarbs = document.getElementById('nutritionCarbs');
-    const nutritionFat = document.getElementById('nutritionFat');
-    const nutritionProtein = document.getElementById('nutritionProtein');
+    // Populate nutrition data - hide if no data exists
+    const nutritionCard = document.getElementById('nutritionCard');
+    const nutrition = recipe.nutrition;
 
-    if (nutritionCalories) nutritionCalories.textContent = nutrition.calories;
-    if (nutritionCarbs) nutritionCarbs.textContent = nutrition.carbs;
-    if (nutritionFat) nutritionFat.textContent = nutrition.fat;
-    if (nutritionProtein) nutritionProtein.textContent = nutrition.protein;
+    if (nutrition && nutritionCard) {
+        nutritionCard.style.display = 'flex';
+        const nutritionCalories = document.getElementById('nutritionCalories');
+        const nutritionCarbs = document.getElementById('nutritionCarbs');
+        const nutritionFat = document.getElementById('nutritionFat');
+        const nutritionProtein = document.getElementById('nutritionProtein');
+
+        if (nutritionCalories) nutritionCalories.textContent = nutrition.calories || '--';
+        if (nutritionCarbs) nutritionCarbs.textContent = nutrition.carbs || '--';
+        if (nutritionFat) nutritionFat.textContent = nutrition.fat || '--';
+        if (nutritionProtein) nutritionProtein.textContent = nutrition.protein || '--';
+    } else if (nutritionCard) {
+        nutritionCard.style.display = 'none';
+    }
 
     // Initialize recipe tabs for mobile
     initRecipeTabs();
