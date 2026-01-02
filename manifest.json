@@ -1,0 +1,35 @@
+{
+  "name": "Cookbook - Delicious Recipes Made Easy",
+  "short_name": "Cookbook",
+  "description": "Discover delicious recipes with step-by-step guides and beautiful illustrations. Your personal digital cookbook.",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#FF6B35",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["food", "lifestyle"],
+  "shortcuts": [
+    {
+      "name": "All Recipes",
+      "short_name": "Recipes",
+      "description": "View all available recipes",
+      "url": "/index.html",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
