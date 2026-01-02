@@ -261,6 +261,7 @@ function initImportPage() {
 
     initFileUpload();
     initPasteJsonImport();
+    initExport();
 
     // Show/hide format info
     document.getElementById('showFormatBtn')?.addEventListener('click', (e) => {
@@ -432,5 +433,46 @@ function initPasteJsonImport() {
     });
 }
 
+// ========================================
+// Export Recipes
+// ========================================
+
+function initExport() {
+    const exportBtn = document.getElementById('exportAllBtn');
+    if (!exportBtn) return;
+
+    exportBtn.addEventListener('click', () => {
+        const recipes = CustomRecipes.getAll();
+
+        if (recipes.length === 0) {
+            alert('No custom recipes to export. Import some recipes first!');
+            return;
+        }
+
+        // Create downloadable JSON file
+        const dataStr = JSON.stringify({ recipes }, null, 2);
+        const blob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `cookbook-recipes-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        // Show toast
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = `✅ Exported ${recipes.length} recipe(s)!`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    });
+}
+
 // Run on page load
 initImportPage();
+
+// Initialize export separately (works even if dropZone check fails)
+initExport();

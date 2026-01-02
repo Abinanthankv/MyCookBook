@@ -34,6 +34,47 @@ themeToggle.addEventListener('click', () => {
 
 let allRecipes = [];
 
+// ========================================
+// Bookmarks Storage
+// ========================================
+
+const Bookmarks = {
+    STORAGE_KEY: 'cookbook-bookmarks',
+
+    getAll() {
+        return JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '[]');
+    },
+
+    isBookmarked(id) {
+        return this.getAll().includes(id);
+    },
+
+    toggle(id) {
+        let bookmarks = this.getAll();
+        if (bookmarks.includes(id)) {
+            bookmarks = bookmarks.filter(b => b !== id);
+        } else {
+            bookmarks.push(id);
+        }
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(bookmarks));
+        return bookmarks.includes(id);
+    },
+
+    add(id) {
+        const bookmarks = this.getAll();
+        if (!bookmarks.includes(id)) {
+            bookmarks.push(id);
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(bookmarks));
+        }
+    },
+
+    remove(id) {
+        let bookmarks = this.getAll();
+        bookmarks = bookmarks.filter(b => b !== id);
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(bookmarks));
+    }
+};
+
 async function loadRecipes() {
     try {
         const response = await fetch('data/recipes.json');
@@ -62,16 +103,28 @@ function createRecipeCard(recipe) {
     card.className = 'recipe-card';
     card.setAttribute('data-recipe-id', recipe.id);
 
-    // Delete button for custom recipes
+    const isBookmarked = Bookmarks.isBookmarked(recipe.id);
+
+    // Delete button for custom recipes - uses SVG icon
+    const deleteIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
     const deleteBtn = recipe.isCustom ? `
-        <button class="recipe-delete-btn" data-id="${recipe.id}" title="Delete recipe">🗑️</button>
+        <button class="recipe-delete-btn" data-id="${recipe.id}" title="Delete recipe">${deleteIcon}</button>
     ` : '';
+
+    // Bookmark button - uses SVG icons
+    const bookmarkIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>`;
+    const bookmarkBtn = `
+        <button class="recipe-bookmark-btn ${isBookmarked ? 'active' : ''}" data-id="${recipe.id}" title="Bookmark">
+            ${bookmarkIcon}
+        </button>
+    `;
 
     card.innerHTML = `
     <div class="recipe-card-image">
       <img src="${recipe.image}" alt="${recipe.title}" loading="lazy">
       <span class="recipe-card-category">${recipe.category}</span>
       ${recipe.isCustom ? '<span class="recipe-card-custom">Custom</span>' : ''}
+      ${bookmarkBtn}
       ${deleteBtn}
     </div>
     <div class="recipe-card-content">
@@ -84,6 +137,16 @@ function createRecipeCard(recipe) {
       </div>
     </div>
   `;
+
+    // Bookmark button click handler
+    const bookmarkBtnEl = card.querySelector('.recipe-bookmark-btn');
+    if (bookmarkBtnEl) {
+        bookmarkBtnEl.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const nowBookmarked = Bookmarks.toggle(recipe.id);
+            bookmarkBtnEl.classList.toggle('active', nowBookmarked);
+        });
+    }
 
     // Delete button click handler
     const deleteBtnEl = card.querySelector('.recipe-delete-btn');
@@ -142,7 +205,11 @@ function filterRecipes(searchTerm, category) {
     let filtered = allRecipes;
 
     // Filter by category
-    if (category && category !== 'all') {
+    if (category === 'bookmarks') {
+        // Filter to show only bookmarked recipes
+        const bookmarkedIds = Bookmarks.getAll();
+        filtered = filtered.filter(r => bookmarkedIds.includes(r.id));
+    } else if (category && category !== 'all') {
         filtered = filtered.filter(r => r.category === category);
     }
 
@@ -173,11 +240,11 @@ function initSearch() {
         renderRecipes(filtered);
     });
 
-    // Category filter handler
+    // Category filter handler (supports both .filter-btn and .chip)
     filters.addEventListener('click', (e) => {
-        if (e.target.classList.contains('filter-btn')) {
+        if (e.target.classList.contains('filter-btn') || e.target.classList.contains('chip')) {
             // Update active state
-            filters.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            filters.querySelectorAll('.filter-btn, .chip').forEach(btn => btn.classList.remove('active'));
             e.target.classList.add('active');
 
             // Apply filter

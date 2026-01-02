@@ -46,29 +46,31 @@
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
+  <!-- Hero Section - Mobile First -->
+  <section class="hero-m3">
     <div class="container">
-      <h1 class="hero-title">Cook Like a Pro</h1>
-      <p class="hero-subtitle">
-        Discover delicious recipes with step-by-step guides and beautiful illustrations
-      </p>
+      <!-- Welcome Greeting -->
+      <div class="greeting-section">
 
-      <!-- Search Bar -->
-      <div class="search-container">
-        <div class="search-bar">
-          <span class="search-icon">🔍</span>
-          <input type="text" class="search-input" id="searchInput" placeholder="Search recipes..." autocomplete="off">
-        </div>
+        <h1 class="greeting-title">Feeling hungry?</h1>
+        <p class="greeting-subtitle">What are we cooking today?</p>
       </div>
 
-      <!-- Category Filters -->
-      <div class="filters" id="filters">
-        <button class="filter-btn active" data-category="all">All Recipes</button>
-        <button class="filter-btn" data-category="breakfast">🌅 Breakfast</button>
-        <button class="filter-btn" data-category="lunch">🥗 Lunch</button>
-        <button class="filter-btn" data-category="dinner">🍽️ Dinner</button>
-        <button class="filter-btn" data-category="dessert">🍰 Dessert</button>
+      <!-- Search Bar - Material 3 Style -->
+      <div class="search-m3">
+        <span class="search-m3-icon">🔍</span>
+        <input type="text" class="search-m3-input" id="searchInput" placeholder="Search recipes, ingredients..."
+          autocomplete="off">
+      </div>
+
+      <!-- Category Chips - Material 3 Style -->
+      <div class="category-chips" id="filters">
+        <button class="chip active" data-category="all">✨ All</button>
+        <button class="chip" data-category="bookmarks">🔖 Saved</button>
+        <button class="chip" data-category="breakfast">🌅 Breakfast</button>
+        <button class="chip" data-category="lunch">🥗 Lunch</button>
+        <button class="chip" data-category="dinner">🍽️ Dinner</button>
+        <button class="chip" data-category="dessert">🍰 Dessert</button>
       </div>
     </div>
   </section>

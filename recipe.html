@@ -55,14 +55,35 @@
             <div class="recipe-meta-bar" id="heroMeta">
                 <!-- Meta info will be loaded here -->
             </div>
+            <!-- Play Video Button -->
+            <button class="hero-play-btn" id="playVideoBtn" style="display: none;">
+                <span class="play-icon">▶</span>
+                <span class="play-text">Watch Video</span>
+            </button>
         </div>
     </section>
 
+    <!-- Video Modal -->
+    <div class="video-modal" id="videoModal">
+        <div class="video-modal-content">
+            <button class="video-modal-close" id="closeVideoBtn">✕</button>
+            <div class="video-modal-player" id="videoModalPlayer">
+                <!-- Video iframe will be inserted here -->
+            </div>
+        </div>
+    </div>
+
     <!-- Recipe Content -->
     <main class="container">
-        <a href="index.html" class="back-btn">
-            ← Back to Recipes
-        </a>
+        <div class="recipe-actions-bar">
+            <a href="index.html" class="back-btn">
+                ← Back to Recipes
+            </a>
+            <div class="recipe-action-btns">
+                <button class="action-btn" id="shareRecipeBtn" title="Share">📤 Share</button>
+                <button class="action-btn" id="exportRecipeBtn" title="Export as JSON">📥 Export</button>
+            </div>
+        </div>
 
         <div class="recipe-content">
             <!-- Ingredients Sidebar -->

@@ -422,13 +422,17 @@ ol {
   color: white;
   border: none;
   cursor: pointer;
-  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   transition: all var(--transition-fast);
   z-index: 5;
+}
+
+.recipe-delete-btn svg {
+  width: 18px;
+  height: 18px;
 }
 
 .recipe-card:hover .recipe-delete-btn {
@@ -438,6 +442,47 @@ ol {
 .recipe-delete-btn:hover {
   background: #c0392b;
   transform: scale(1.1);
+}
+
+/* Bookmark Button */
+.recipe-bookmark-btn {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  z-index: 5;
+  box-shadow: var(--shadow-sm);
+  color: var(--color-text);
+}
+
+.recipe-bookmark-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.recipe-bookmark-btn:hover {
+  transform: scale(1.1);
+  background: var(--color-bg-card);
+  border-color: var(--color-primary);
+}
+
+.recipe-bookmark-btn.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+.recipe-bookmark-btn.active svg {
+  fill: white;
 }
 
 .recipe-card-content {
@@ -1747,4 +1792,280 @@ ol {
 
 .paste-actions {
   margin-top: var(--space-md);
+}
+
+/* ========================================
+   Export & Share
+   ======================================== */
+
+.export-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.export-info {
+  flex: 1;
+}
+
+.recipe-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.recipe-action-btns {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.action-btn {
+  padding: var(--space-sm) var(--space-md);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-card);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.action-btn:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: white;
+}
+
+/* ========================================
+   Video Play Button & Modal
+   ======================================== */
+
+.hero-play-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+  padding: var(--space-md) var(--space-xl);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: var(--radius-full);
+  color: white;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.hero-play-btn:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.play-icon {
+  font-size: 1.2rem;
+}
+
+/* Video Modal */
+.video-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-normal);
+}
+
+.video-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.video-modal-content {
+  position: relative;
+  width: 90%;
+  max-width: 1200px;
+  aspect-ratio: 16 / 9;
+}
+
+.video-modal-close {
+  position: absolute;
+  top: -50px;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: var(--radius-full);
+  color: white;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  z-index: 10;
+}
+
+.video-modal-close:hover {
+  background: var(--color-primary);
+}
+
+.video-modal-player {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.video-modal-player iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ========================================
+   Material 3 Homepage - Mobile First
+   ======================================== */
+
+/* Hero Section - M3 */
+.hero-m3 {
+  background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-card) 100%);
+  padding: var(--space-xl) 0 var(--space-lg);
+  min-height: auto;
+}
+
+/* Greeting Section */
+.greeting-section {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+
+
+.greeting-title {
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  color: var(--color-text);
+  margin-bottom: var(--space-xs);
+  letter-spacing: -0.02em;
+}
+
+.greeting-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-light);
+  font-weight: 500;
+}
+
+/* Search Bar - Material 3 Style */
+.search-m3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-md) var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+  max-width: 500px;
+  margin: 0 auto var(--space-xl);
+}
+
+.search-m3:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(230, 126, 34, 0.1);
+}
+
+.search-m3-icon {
+  font-size: 1.25rem;
+  opacity: 0.6;
+}
+
+.search-m3-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  outline: none;
+}
+
+.search-m3-input::placeholder {
+  color: var(--color-text-light);
+}
+
+/* Category Chips - Material 3 Style */
+.category-chips {
+  display: flex;
+  gap: var(--space-sm);
+  overflow-x: auto;
+  padding: var(--space-xs) 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-lg);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background: var(--color-bg-card);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.chip:hover {
+  border-color: var(--color-primary-light);
+  background: rgba(230, 126, 34, 0.05);
+}
+
+.chip.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+/* Desktop Responsive */
+@media (min-width: 768px) {
+  .hero-m3 {
+    padding: var(--space-3xl) 0;
+  }
+
+  .greeting-emoji {
+    font-size: 3.5rem;
+  }
+
+  .greeting-title {
+    font-size: var(--font-size-4xl);
+  }
+
+  .greeting-subtitle {
+    font-size: var(--font-size-xl);
+  }
+
+  .category-chips {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 }

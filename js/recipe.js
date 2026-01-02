@@ -239,6 +239,62 @@ function renderRecipeHero(recipe) {
     <span>👤 Serves: ${recipe.servings}</span>
     <span>📊 ${recipe.difficulty}</span>
   `;
+
+    // Show play button if video exists
+    const playBtn = document.getElementById('playVideoBtn');
+    if (playBtn && recipe.videoUrl) {
+        playBtn.style.display = 'flex';
+        initVideoModal(recipe.videoUrl);
+    }
+}
+
+// ========================================
+// Video Modal
+// ========================================
+
+function initVideoModal(videoUrl) {
+    const playBtn = document.getElementById('playVideoBtn');
+    const modal = document.getElementById('videoModal');
+    const closeBtn = document.getElementById('closeVideoBtn');
+    const playerContainer = document.getElementById('videoModalPlayer');
+
+    if (!playBtn || !modal) return;
+
+    // Extract YouTube video ID
+    const videoId = extractYouTubeId(videoUrl);
+    if (!videoId) return;
+
+    // Open modal
+    playBtn.addEventListener('click', () => {
+        playerContainer.innerHTML = `
+            <iframe 
+                src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen>
+            </iframe>
+        `;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    });
+
+    // Close modal
+    closeBtn?.addEventListener('click', closeVideoModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeVideoModal();
+    });
+
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeVideoModal();
+        }
+    });
+
+    function closeVideoModal() {
+        modal.classList.remove('active');
+        playerContainer.innerHTML = '';
+        document.body.style.overflow = '';
+    }
 }
 
 function renderIngredients(ingredients) {
@@ -452,6 +508,73 @@ async function initRecipePage() {
     await loadRecipes();
     const recipe = getRecipeById(recipeId);
     renderRecipe(recipe);
+
+    // Initialize share and export
+    initShareExport(recipe);
+}
+
+// ========================================
+// Share & Export Recipe
+// ========================================
+
+function initShareExport(recipe) {
+    if (!recipe) return;
+
+    // Share button
+    const shareBtn = document.getElementById('shareRecipeBtn');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', async () => {
+            const shareData = {
+                title: recipe.title,
+                text: `Check out this recipe: ${recipe.title}\n${recipe.description}`,
+                url: window.location.href
+            };
+
+            try {
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                } else {
+                    // Fallback: copy link to clipboard
+                    await navigator.clipboard.writeText(window.location.href);
+                    showToast('📋 Link copied to clipboard!');
+                }
+            } catch (err) {
+                if (err.name !== 'AbortError') {
+                    // Fallback to clipboard
+                    try {
+                        await navigator.clipboard.writeText(window.location.href);
+                        showToast('📋 Link copied to clipboard!');
+                    } catch {
+                        showToast('❌ Could not share');
+                    }
+                }
+            }
+        });
+    }
+
+    // Export button
+    const exportBtn = document.getElementById('exportRecipeBtn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+            // Create clean recipe object for export
+            const exportRecipe = { ...recipe };
+            delete exportRecipe.isCustom; // Remove internal flag
+
+            const dataStr = JSON.stringify(exportRecipe, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${recipe.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast('✅ Recipe exported!');
+        });
+    }
 }
 
 // Run on page load
