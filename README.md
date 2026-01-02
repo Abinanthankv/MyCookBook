@@ -1,19 +1,20 @@
-# 🍳 Cookbook
+# 🍳 Cookbook Royale
 
-A beautiful static cookbook website with step-by-step recipe guides. Designed to be hosted on GitHub Pages.
+A premium, Material 3-inspired static cookbook website with advanced recipe management, persistent theme customization, and beautiful step-by-step guides.
 
 ![Cookbook Preview](https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&q=80)
 
-## ✨ Features
+## ✨ Modern Features
 
-- 🎨 **Beautiful Design** - Modern glassmorphism UI with smooth animations
-- 🌙 **Dark Mode** - Automatic theme detection with manual toggle
-- 🔍 **Search** - Real-time recipe search
-- 🏷️ **Categories** - Filter by Breakfast, Lunch, Dinner, Dessert
-- 📖 **Step-by-Step** - Detailed instructions with images for each step
-- ✅ **Ingredient Checkboxes** - Track your progress (saved in browser)
-- 📱 **Responsive** - Works on all devices
-- ⚡ **Fast** - Pure HTML/CSS/JS, no build tools needed
+- 🎨 **Material 3 Theme System** - Three curated presets (Fresh Harvest, Modern Bistro, Cinnamon & Spice) with deep customization.
+- � **Live Theme Editor** - Tweak any color or build a "Custom Theme" from scratch with real-time color pickers.
+- � **Recipe Collections** - Organize your favorite recipes into custom named folders and collections.
+- � **Cook History** - Track your kitchen wins! Persistent log of every time you cook a recipe.
+- 🔍 **Ingredient Search** - Smart filter system to find recipes based on what's in your pantry.
+- 🎥 **Video Recipe Steps** - YouTube integration for visual learners on every instruction step.
+- 🛒 **Shopping List** - One-click ingredient adding to a persistent, manageable list.
+- 📱 **PWA Ready** - Optimized for mobile with a dedicated bottom-nav and offline-aware manifest.
+- ⚡ **Turbo Static** - Pure HTML5/CSS3/Vanilla JS with global initialization for zero-flash loading.
 
 ## 🚀 Quick Start
 
@@ -30,79 +31,63 @@ A beautiful static cookbook website with step-by-step recipe guides. Designed to
    ```
 3. Open `http://localhost:8000` in your browser
 
-### Deploy to GitHub Pages
-
-1. Push this code to a GitHub repository
-2. Go to **Settings** → **Pages**
-3. Set Source to **Deploy from a branch**
-4. Select `main` branch and `/ (root)` folder
-5. Click **Save**
-
-Your site will be live at `https://yourusername.github.io/repository-name`
-
 ## 📁 Project Structure
 
 ```
 cookbook/
-├── index.html          # Homepage with recipe grid
-├── recipe.html         # Recipe detail page
+├── index.html          # Discovery hub & recipe grid
+├── recipe.html         # Interactive recipe details & video steps
+├── shopping.html       # Dynamic shopping list manager
+├── import.html         # Data import/export (JSON)
+├── settings.html       # Theme selector & Live Color Editor
+├── collections.html    # Folder & collection management
 ├── css/
-│   └── styles.css      # All styles & design tokens
+│   └── styles.css      # Design system & Material 3 tokens
 ├── js/
-│   ├── app.js          # Main app logic
-│   └── recipe.js       # Recipe page logic
-├── data/
-│   └── recipes.json    # Recipe database
-└── README.md
+│   ├── app.js          # Homepage logic & filtering
+│   ├── recipe.js       # Cooking mode & video playback
+│   ├── common.js       # Global theme init & shared utilities
+│   ├── collections.js  # Collections & Cook History data manager
+│   ├── shopping.js     # Shopping list persistence logic
+│   ├── settings.js     # Theme switcher & color picker logic
+│   └── import.js       # JSON data handling
+└── data/
+    └── recipes.json    # Initial recipe database
 ```
 
-## 🍽️ Adding New Recipes
+## 🎨 Theme Customization
 
-Edit `data/recipes.json` and add a new recipe object:
+### Curated Presets
+Access these beautiful presets in **Settings**:
+- **Fresh Harvest**: Organic greens and coral oranges.
+- **Modern Bistro**: Sophisticated purples and mint accents.
+- **Cinnamon & Spice**: Warm terracotta and cream kitchen tones.
+
+### Live Editor
+You can fine-tune any theme via the **Theme Editor**. Changes are stored in `localStorage` and applied globally via custom CSS properties:
+```css
+[data-theme="custom"] {
+  --color-primary: #your-hex;
+  --color-bg: #your-hex;
+}
+```
+
+## 🍽️ Data Format
+
+Recipes are managed via `data/recipes.json`. Example structure:
 
 ```json
 {
-  "id": "unique-recipe-id",
-  "title": "Recipe Title",
-  "description": "Short description",
-  "category": "breakfast|lunch|dinner|dessert",
-  "difficulty": "easy|medium|hard",
-  "prepTime": "10 mins",
-  "cookTime": "20 mins",
-  "totalTime": "30 mins",
-  "servings": 4,
-  "image": "URL to hero image",
-  "ingredients": ["ingredient 1", "ingredient 2"],
+  "id": "recipe-id",
+  "title": "Title",
+  "videoSteps": {
+    "url": "https://youtu.be/...",
+    "steps": { "1": 45, "2": 120 }
+  },
+  "ingredients": ["1 cup Sugar", "2 Eggs"],
   "steps": [
-    {
-      "step": 1,
-      "title": "Step Title",
-      "description": "Detailed instructions...",
-      "image": "URL to step image",
-      "tip": "Optional pro tip"
-    }
+    { "step": 1, "title": "Prep", "description": "...", "tip": "Don't overmix!" }
   ]
-}
-```
-
-## 🎨 Customization
-
-### Colors
-Edit CSS variables in `css/styles.css`:
-
-```css
-:root {
-  --color-primary: #e67e22;      /* Main accent color */
-  --color-secondary: #2c3e50;    /* Dark color */
-  --color-bg: #faf8f5;           /* Background */
-}
-```
-
-### Dark Mode Colors
-```css
-[data-theme="dark"] {
-  --color-bg: #1a1a2e;
-  --color-bg-card: #16213e;
 }
 ```
 
