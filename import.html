@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Import recipes from JSON files">
+    <title>Import Recipe | Cookbook</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FF6B35">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Cookbook">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🍳</span>
+                <span>Cookbook</span>
+            </a>
+
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Recipes</a>
+                <a href="shopping.html" class="nav-link">Shopping List</a>
+                <a href="import.html" class="nav-link active">Import</a>
+            </nav>
+
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                🌙
+            </button>
+        </div>
+    </header>
+
+    <!-- Import Content -->
+    <main class="import-page">
+        <div class="container">
+            <div class="import-header">
+                <h1 class="import-title">📥 Import Recipes</h1>
+                <p class="import-subtitle">Upload a JSON file to add recipes to your cookbook</p>
+            </div>
+
+            <!-- Upload Section -->
+            <div class="import-card">
+                <h3 class="import-card-title">📄 Upload JSON File</h3>
+                <p class="import-card-desc">
+                    Upload a JSON file containing recipe data.
+                    <a href="#" id="showFormatBtn">View expected format</a>
+                </p>
+
+                <div class="file-upload-area" id="dropZone">
+                    <input type="file" id="fileInput" accept=".json" hidden>
+                    <div class="upload-icon">📁</div>
+                    <p class="upload-text">Drag & drop a JSON file here</p>
+                    <p class="upload-or">or</p>
+                    <button class="btn-primary" id="browseBtn">Browse Files</button>
+                </div>
+
+                <!-- Paste JSON -->
+                <div class="paste-divider">
+                    <span>OR paste JSON directly</span>
+                </div>
+                <textarea id="pasteJsonInput" class="import-textarea" rows="8"
+                    placeholder='Paste your recipe JSON here...&#10;&#10;Example: {"title": "Recipe Name", "ingredients": [...], "steps": [...]}'></textarea>
+                <div class="paste-actions">
+                    <button class="btn-primary" id="importPastedJson">📥 Import Pasted JSON</button>
+                </div>
+            </div>
+
+            <!-- YouTube Prompt Generator -->
+            <div class="import-card">
+                <h3 class="import-card-title">🎬 Generate from YouTube</h3>
+                <p class="import-card-desc">
+                    Enter a YouTube cooking video URL to generate an AI prompt that extracts the recipe
+                </p>
+
+                <div class="url-input-group">
+                    <input type="url" id="youtubeUrl" class="import-input"
+                        placeholder="https://www.youtube.com/watch?v=...">
+                    <button class="btn-primary" id="generatePromptBtn">✨ Generate Prompt</button>
+                </div>
+
+                <!-- Generated Prompt -->
+                <div id="promptOutput" class="prompt-output" style="display: none;">
+                    <label class="prompt-label">📋 Copy this prompt and paste it into ChatGPT, Gemini, or
+                        Claude:</label>
+                    <textarea id="generatedPrompt" class="import-textarea prompt-textarea" rows="12"
+                        readonly></textarea>
+                    <div class="prompt-actions">
+                        <button class="btn-primary" id="copyPromptBtn">📋 Copy Prompt</button>
+                        <span class="copy-feedback" id="copyFeedback"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Format Info (Hidden by default) -->
+            <div class="import-card format-info" id="formatInfo" style="display: none;">
+                <h3 class="import-card-title">📋 Expected JSON Format</h3>
+                <pre class="format-code"><code>{
+  "title": "Recipe Name",
+  "description": "Brief description",
+  "category": "breakfast|lunch|dinner|dessert",
+  "difficulty": "easy|medium|hard",
+  "prepTime": "10 mins",
+  "cookTime": "20 mins",
+  "totalTime": "30 mins",
+  "servings": 4,
+  "image": "https://example.com/image.jpg",
+"videoUrl": "https://youtu.be/",
+  "ingredients": [
+    "1 cup flour",
+    "2 eggs"
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "title": "Step Title",
+      "description": "Step instructions",
+      "startTime": "02:35",
+      "endTime": "04:38",
+      "timerMinutes": 5,
+      "tip": "tips"
+        
+    }
+  ]
+}</code></pre>
+                <button class="btn-secondary" id="hideFormatBtn">Hide Format</button>
+            </div>
+
+            <!-- Recipe Preview -->
+            <div class="recipe-preview" id="recipePreview" style="display: none;">
+                <h3 class="preview-title">📋 Recipe Preview</h3>
+
+                <div class="preview-card">
+                    <div class="preview-field">
+                        <label>Title</label>
+                        <input type="text" id="previewTitle" class="import-input">
+                    </div>
+
+                    <div class="preview-field">
+                        <label>Description</label>
+                        <textarea id="previewDescription" class="import-textarea" rows="2"></textarea>
+                    </div>
+
+                    <div class="preview-row">
+                        <div class="preview-field">
+                            <label>Category</label>
+                            <select id="previewCategory" class="import-select">
+                                <option value="breakfast">🌅 Breakfast</option>
+                                <option value="lunch">🥗 Lunch</option>
+                                <option value="dinner">🍽️ Dinner</option>
+                                <option value="dessert">🍰 Dessert</option>
+                            </select>
+                        </div>
+                        <div class="preview-field">
+                            <label>Difficulty</label>
+                            <select id="previewDifficulty" class="import-select">
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                        </div>
+                        <div class="preview-field">
+                            <label>Servings</label>
+                            <input type="number" id="previewServings" class="import-input" value="4" min="1">
+                        </div>
+                    </div>
+
+                    <div class="preview-field">
+                        <label>Ingredients (<span id="ingredientCount">0</span>)</label>
+                        <textarea id="previewIngredients" class="import-textarea" rows="6"></textarea>
+                    </div>
+
+                    <div class="preview-field">
+                        <label>Steps (<span id="stepCount">0</span>)</label>
+                        <textarea id="previewSteps" class="import-textarea" rows="8"></textarea>
+                    </div>
+
+                    <input type="hidden" id="previewImage">
+                    <input type="hidden" id="previewVideoUrl">
+                </div>
+
+                <div class="preview-actions">
+                    <button class="btn-secondary" id="cancelImport">Cancel</button>
+                    <button class="btn-primary" id="saveRecipe">💾 Save to Cookbook</button>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div class="import-error" id="importError" style="display: none;">
+                <div class="error-icon">❌</div>
+                <p class="error-message" id="errorMessage">Something went wrong</p>
+                <button class="btn-secondary" id="retryBtn">Try Again</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🏠</span>
+            <span class="bottom-nav-label">Home</span>
+        </a>
+        <a href="shopping.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🛒</span>
+            <span class="bottom-nav-label">Shopping</span>
+            <span class="bottom-nav-badge" id="shoppingBadge"></span>
+        </a>
+        <a href="import.html" class="bottom-nav-item active">
+            <span class="bottom-nav-icon">➕</span>
+            <span class="bottom-nav-label">Import</span>
+        </a>
+    </nav>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-text">
+                Made with ❤️ | <a href="https://github.com">View on GitHub</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/shopping.js"></script>
+    <script src="js/import.js"></script>
+</body>
+
+</html>

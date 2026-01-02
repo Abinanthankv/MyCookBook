@@ -399,6 +399,47 @@ ol {
   text-transform: uppercase;
 }
 
+.recipe-card-custom {
+  position: absolute;
+  top: var(--space-md);
+  right: var(--space-md);
+  background: var(--color-accent);
+  color: white;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.recipe-delete-btn {
+  position: absolute;
+  bottom: var(--space-md);
+  right: var(--space-md);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: rgba(231, 76, 60, 0.9);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all var(--transition-fast);
+  z-index: 5;
+}
+
+.recipe-card:hover .recipe-delete-btn {
+  opacity: 1;
+}
+
+.recipe-delete-btn:hover {
+  background: #c0392b;
+  transform: scale(1.1);
+}
+
 .recipe-card-content {
   padding: var(--space-lg);
 }
@@ -1390,4 +1431,320 @@ ol {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
+}
+
+/* ========================================
+   Import Page
+   ======================================== */
+
+.import-page {
+  padding: var(--space-xl) 0;
+  min-height: calc(100vh - 200px);
+}
+
+.import-header {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+}
+
+.import-title {
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  margin-bottom: var(--space-sm);
+}
+
+.import-subtitle {
+  color: var(--color-text-light);
+  font-size: var(--font-size-lg);
+}
+
+.import-card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-lg);
+  border: 1px solid var(--color-border);
+}
+
+.import-card-title {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+}
+
+.import-card-desc {
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-md);
+}
+
+.import-card-desc a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.api-key-input-group,
+.url-input-group {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.import-input {
+  flex: 1;
+  min-width: 200px;
+  padding: var(--space-sm) var(--space-md);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  background: var(--color-bg);
+  color: var(--color-text);
+  transition: all var(--transition-fast);
+}
+
+.import-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.import-textarea {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  font-family: inherit;
+  background: var(--color-bg);
+  color: var(--color-text);
+  resize: vertical;
+  transition: all var(--transition-fast);
+}
+
+.import-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.import-select {
+  padding: var(--space-sm) var(--space-md);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  background: var(--color-bg);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.api-key-status {
+  font-size: var(--font-size-sm);
+  margin-top: var(--space-sm);
+}
+
+/* Loading State */
+.import-loading {
+  text-align: center;
+  padding: var(--space-3xl);
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  margin: 0 auto var(--space-lg);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Error State */
+.import-error {
+  text-align: center;
+  padding: var(--space-2xl);
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid #e74c3c;
+}
+
+.error-icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-md);
+}
+
+.error-message {
+  color: #e74c3c;
+  margin-bottom: var(--space-lg);
+}
+
+/* Recipe Preview */
+.recipe-preview {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  border: 2px solid var(--color-accent);
+}
+
+.preview-title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  margin-bottom: var(--space-lg);
+  color: var(--color-accent);
+}
+
+.preview-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.preview-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.preview-field label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-light);
+}
+
+.preview-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-md);
+}
+
+.preview-actions {
+  display: flex;
+  gap: var(--space-md);
+  justify-content: flex-end;
+  margin-top: var(--space-xl);
+}
+
+/* File Upload Area */
+.file-upload-area {
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3xl);
+  text-align: center;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.file-upload-area:hover,
+.file-upload-area.dragover {
+  border-color: var(--color-primary);
+  background: rgba(230, 126, 34, 0.05);
+}
+
+.upload-icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-md);
+}
+
+.upload-text {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--space-sm);
+}
+
+.upload-or {
+  color: var(--color-text-light);
+  margin-bottom: var(--space-md);
+}
+
+/* Format Info */
+.format-info {
+  background: var(--color-bg-card);
+}
+
+.format-code {
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  overflow-x: auto;
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-md);
+}
+
+.format-code code {
+  font-family: 'Courier New', monospace;
+  color: var(--color-text);
+  white-space: pre;
+}
+
+/* ========================================
+   YouTube Prompt Generator
+   ======================================== */
+
+.url-input-group {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  margin-top: var(--space-md);
+}
+
+.prompt-output {
+  margin-top: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.prompt-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+  color: var(--color-text);
+}
+
+.prompt-textarea {
+  font-family: 'Courier New', monospace;
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  background: var(--color-bg);
+}
+
+.prompt-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.copy-feedback {
+  color: var(--color-accent);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+}
+
+/* Paste JSON */
+.paste-divider {
+  display: flex;
+  align-items: center;
+  margin: var(--space-lg) 0;
+  color: var(--color-text-light);
+  font-size: var(--font-size-sm);
+}
+
+.paste-divider::before,
+.paste-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--color-border);
+}
+
+.paste-divider span {
+  padding: 0 var(--space-md);
+}
+
+.paste-actions {
+  margin-top: var(--space-md);
 }

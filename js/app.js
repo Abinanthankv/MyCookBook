@@ -38,11 +38,18 @@ async function loadRecipes() {
     try {
         const response = await fetch('data/recipes.json');
         const data = await response.json();
-        allRecipes = data.recipes;
+        let recipes = data.recipes || [];
+
+        // Merge with custom recipes from localStorage
+        const customRecipes = JSON.parse(localStorage.getItem('cookbook-custom-recipes') || '[]');
+        allRecipes = [...recipes, ...customRecipes];
+
         return allRecipes;
     } catch (error) {
         console.error('Error loading recipes:', error);
-        return [];
+        // Still try to load custom recipes even if default recipes fail
+        allRecipes = JSON.parse(localStorage.getItem('cookbook-custom-recipes') || '[]');
+        return allRecipes;
     }
 }
 
@@ -55,10 +62,17 @@ function createRecipeCard(recipe) {
     card.className = 'recipe-card';
     card.setAttribute('data-recipe-id', recipe.id);
 
+    // Delete button for custom recipes
+    const deleteBtn = recipe.isCustom ? `
+        <button class="recipe-delete-btn" data-id="${recipe.id}" title="Delete recipe">🗑️</button>
+    ` : '';
+
     card.innerHTML = `
     <div class="recipe-card-image">
       <img src="${recipe.image}" alt="${recipe.title}" loading="lazy">
       <span class="recipe-card-category">${recipe.category}</span>
+      ${recipe.isCustom ? '<span class="recipe-card-custom">Custom</span>' : ''}
+      ${deleteBtn}
     </div>
     <div class="recipe-card-content">
       <h3 class="recipe-card-title">${recipe.title}</h3>
@@ -71,11 +85,35 @@ function createRecipeCard(recipe) {
     </div>
   `;
 
+    // Delete button click handler
+    const deleteBtnEl = card.querySelector('.recipe-delete-btn');
+    if (deleteBtnEl) {
+        deleteBtnEl.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (confirm(`Delete "${recipe.title}"?`)) {
+                deleteCustomRecipe(recipe.id);
+            }
+        });
+    }
+
     card.addEventListener('click', () => {
         window.location.href = `recipe.html?id=${recipe.id}`;
     });
 
     return card;
+}
+
+// Delete custom recipe
+function deleteCustomRecipe(id) {
+    const STORAGE_KEY = 'cookbook-custom-recipes';
+    let recipes = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    recipes = recipes.filter(r => r.id !== id);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(recipes));
+
+    // Reload recipes
+    loadRecipes().then(() => {
+        renderRecipes(allRecipes);
+    });
 }
 
 function renderRecipes(recipes) {
@@ -155,7 +193,8 @@ function initSearch() {
 // ========================================
 
 function getRecipeById(id) {
-    return allRecipes.find(r => r.id === id);
+    // Use loose equality to handle string/number comparison
+    return allRecipes.find(r => r.id == id || String(r.id) === String(id));
 }
 
 function getUrlParam(param) {
