@@ -22,6 +22,9 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Shared Logic (Theme Init) -->
+    <script src="js/common.js"></script>
 </head>
 
 <body>
@@ -37,11 +40,8 @@
                 <a href="index.html" class="nav-link">Recipes</a>
                 <a href="shopping.html" class="nav-link">Shopping List</a>
                 <a href="import.html" class="nav-link">Import</a>
+                <a href="settings.html" class="nav-link">Settings</a>
             </nav>
-
-            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-                🌙
-            </button>
         </div>
     </header>
 
@@ -139,6 +139,37 @@
                     <div class="recipe-tags" id="recipeTags">
                         <span class="tag" id="heroCategory">Loading</span>
                     </div>
+
+                    <!-- Cook History Info (Dynamic) -->
+                    <div class="recipe-cook-info" id="cookInfo" style="display: none;">
+                        <span class="cook-count-badge">👨‍🍳 <span id="cookCount">0</span> times</span>
+                        <span class="last-cooked-text">Last: <span id="lastCookedDate">Never</span></span>
+                    </div>
+
+                    <!-- Enhanced Action Buttons -->
+                    <div class="recipe-enhanced-actions">
+                        <button class="action-button primary" id="markCookedBtn">
+                            <span class="icon">✅</span>
+                            <span>I Made This!</span>
+                        </button>
+                        <div class="dropdown" id="collectionDropdown">
+                            <button class="action-button secondary dropdown-toggle" id="addToCollectionBtn">
+                                <span class="icon">📁</span>
+                                <span>Add to Collection</span>
+                            </button>
+                            <div class="dropdown-menu" id="collectionList">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Cook Log (Section) -->
+                    <div class="cook-log-section" id="cookLogSection" style="display: none;">
+                        <h3 class="log-title">Cooking Log</h3>
+                        <div class="cook-log-list" id="cookLogList">
+                            <!-- Entries will be loaded here -->
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -220,7 +251,45 @@
         </div>
     </footer>
 
+    <!-- History Entry Modal -->
+    <div class="modal" id="historyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Cooking Entry</h3>
+                <button class="modal-close" id="closeHistoryModal">✕</button>
+            </div>
+            <form id="historyForm" class="history-form">
+                <input type="hidden" id="entryId">
+                <div class="form-group">
+                    <label for="historyDate">Date</label>
+                    <input type="date" id="historyDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Meal Type</label>
+                    <div class="meal-type-selector">
+                        <input type="radio" id="meal-breakfast" name="mealType" value="breakfast" required>
+                        <label for="meal-breakfast">🌅 Breakfast</label>
+
+                        <input type="radio" id="meal-lunch" name="mealType" value="lunch">
+                        <label for="meal-lunch">🥗 Lunch</label>
+
+                        <input type="radio" id="meal-dinner" name="mealType" value="dinner">
+                        <label for="meal-dinner">🍽️ Dinner</label>
+
+                        <input type="radio" id="meal-snack" name="mealType" value="snack">
+                        <label for="meal-snack">🥨 Snack</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelHistoryBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Entry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Scripts -->
+    <script src="js/collections.js"></script>
     <script src="js/app.js"></script>
     <script src="js/recipe.js"></script>
     <script src="js/shopping.js"></script>

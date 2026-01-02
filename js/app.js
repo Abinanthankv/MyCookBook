@@ -3,36 +3,11 @@
  */
 
 // ========================================
-// Theme Toggle
-// ========================================
-
-const themeToggle = document.getElementById('themeToggle');
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-
-function setTheme(isDark) {
-    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-    themeToggle.textContent = isDark ? '☀️' : '🌙';
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-}
-
-// Initialize theme
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme) {
-    setTheme(savedTheme === 'dark');
-} else {
-    setTheme(prefersDark.matches);
-}
-
-themeToggle.addEventListener('click', () => {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    setTheme(!isDark);
-});
-
-// ========================================
 // Recipe Data Loading
 // ========================================
 
 let allRecipes = [];
+let activeIngredients = [];
 
 // ========================================
 // Bookmarks Storage
@@ -130,6 +105,14 @@ function createRecipeCard(recipe) {
     <div class="recipe-card-content">
       <h3 class="recipe-card-title">${recipe.title}</h3>
       <p class="recipe-card-desc">${recipe.description}</p>
+      
+      <!-- Cook Count Badge (Dynamic) -->
+      ${CookHistory.getCookCount(recipe.id) > 0 ? `
+        <div class="card-cook-badge">
+            <span>👨‍🍳 ${CookHistory.getCookCount(recipe.id)} made</span>
+        </div>
+      ` : ''}
+
       <div class="recipe-card-meta">
         <span>⏱️ ${recipe.totalTime}</span>
         <span>👤 ${recipe.servings} servings</span>
@@ -173,9 +156,14 @@ function deleteCustomRecipe(id) {
     recipes = recipes.filter(r => r.id !== id);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(recipes));
 
+    // Cleanup collections and history
+    Collections.removeRecipeFromAll(id);
+    CookHistory.deleteForRecipe(id);
+
     // Reload recipes
     loadRecipes().then(() => {
         renderRecipes(allRecipes);
+        renderCollectionChips(); // Refresh the collection counts/chips
     });
 }
 
@@ -201,16 +189,39 @@ function renderRecipes(recipes) {
 // Search & Filter
 // ========================================
 
-function filterRecipes(searchTerm, category) {
+function filterRecipes(searchTerm, category, collectionId = null) {
     let filtered = allRecipes;
 
-    // Filter by category
-    if (category === 'bookmarks') {
+    // Filter by collection first if specified
+    if (collectionId) {
+        const collectionRecipeIds = Collections.getRecipesInCollection(collectionId);
+        filtered = filtered.filter(r => collectionRecipeIds.includes(String(r.id)) || collectionRecipeIds.includes(Number(r.id)));
+    } else if (category === 'bookmarks') {
         // Filter to show only bookmarked recipes
         const bookmarkedIds = Bookmarks.getAll();
         filtered = filtered.filter(r => bookmarkedIds.includes(r.id));
+    } else if (category === 'recently-cooked') {
+        // Filter to show only recently cooked recipes
+        const recent = CookHistory.getRecentlyCooked(50);
+        const recentIds = recent.map(h => h.recipeId);
+        filtered = filtered.filter(r => recentIds.includes(String(r.id)) || recentIds.includes(Number(r.id)));
+        // Sort by recency
+        filtered.sort((a, b) => {
+            const dateA = new Date(recent.find(h => h.recipeId == a.id)?.lastCooked || 0);
+            const dateB = new Date(recent.find(h => h.recipeId == b.id)?.lastCooked || 0);
+            return dateB - dateA;
+        });
     } else if (category && category !== 'all') {
         filtered = filtered.filter(r => r.category === category);
+    }
+
+    // Filter by ingredients (must contain all active ingredients)
+    if (activeIngredients.length > 0) {
+        filtered = filtered.filter(recipe => {
+            return activeIngredients.every(ing =>
+                recipe.ingredients.some(ri => ri.toLowerCase().includes(ing.toLowerCase()))
+            );
+        });
     }
 
     // Filter by search term
@@ -226,33 +237,145 @@ function filterRecipes(searchTerm, category) {
     return filtered;
 }
 
+let currentCategory = 'all';
+let currentCollection = null;
+let currentSearchTerm = '';
+
+function filterAndRender() {
+    const filtered = filterRecipes(currentSearchTerm, currentCategory, currentCollection);
+    renderRecipes(filtered);
+}
+
 function initSearch() {
-    const searchInput = document.getElementById('searchInput');
     const filters = document.getElementById('filters');
+    const collectionFilters = document.getElementById('collectionFilters');
+    const ingredientInput = document.getElementById('ingredientInput');
 
-    if (!searchInput || !filters) return;
+    if (!filters) return;
 
-    let currentCategory = 'all';
+    // Unified search/ingredient input handler
+    if (ingredientInput) {
+        ingredientInput.addEventListener('input', (e) => {
+            currentSearchTerm = e.target.value;
+            filterAndRender();
+        });
+    }
 
-    // Search input handler
-    searchInput.addEventListener('input', (e) => {
-        const filtered = filterRecipes(e.target.value, currentCategory);
-        renderRecipes(filtered);
-    });
-
-    // Category filter handler (supports both .filter-btn and .chip)
+    // Category filter handler
     filters.addEventListener('click', (e) => {
-        if (e.target.classList.contains('filter-btn') || e.target.classList.contains('chip')) {
+        const btn = e.target.closest('.chip');
+        if (btn) {
             // Update active state
-            filters.querySelectorAll('.filter-btn, .chip').forEach(btn => btn.classList.remove('active'));
-            e.target.classList.add('active');
+            filters.querySelectorAll('.chip').forEach(b => b.classList.remove('active'));
+            if (collectionFilters) {
+                collectionFilters.querySelectorAll('.chip').forEach(b => b.classList.remove('active'));
+            }
+            btn.classList.add('active');
 
             // Apply filter
-            currentCategory = e.target.dataset.category;
-            const filtered = filterRecipes(searchInput.value, currentCategory);
-            renderRecipes(filtered);
+            currentCategory = btn.dataset.category;
+            currentCollection = null;
+            filterAndRender();
         }
     });
+
+    // Collection filter handler
+    if (collectionFilters) {
+        collectionFilters.addEventListener('click', (e) => {
+            const btn = e.target.closest('.chip');
+            if (btn) {
+                // Update active state
+                filters.querySelectorAll('.chip').forEach(b => b.classList.remove('active'));
+                collectionFilters.querySelectorAll('.chip').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Apply filter
+                currentCollection = btn.dataset.collection;
+                currentCategory = null;
+                filterAndRender();
+            }
+        });
+
+        // Initialize collections
+        renderCollectionChips();
+    }
+
+    // Initial load
+    filterAndRender();
+    initIngredientFilters();
+}
+
+function initIngredientFilters() {
+    const ingredientInput = document.getElementById('ingredientInput');
+    const addBtn = document.getElementById('addIngredientBtn');
+
+    if (!ingredientInput || !addBtn) return;
+
+    function addIngredient() {
+        const value = ingredientInput.value.trim();
+        if (value && !activeIngredients.includes(value)) {
+            activeIngredients.push(value);
+            ingredientInput.value = '';
+            currentSearchTerm = ''; // Clear text search when adding a tag
+            renderIngredientTags();
+            filterAndRender();
+        }
+    }
+
+    ingredientInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') addIngredient();
+    });
+
+    addBtn.addEventListener('click', addIngredient);
+}
+
+function renderIngredientTags() {
+    const container = document.getElementById('activeIngredients');
+    if (!container) return;
+
+    if (activeIngredients.length === 0) {
+        container.innerHTML = '';
+        return;
+    }
+
+    container.innerHTML = activeIngredients.map(ing => `
+        <div class="ingredient-tag">
+            <span>${ing}</span>
+            <span class="remove-icon" onclick="removeIngredientTag('${ing}')">✕</span>
+        </div>
+    `).join('');
+}
+
+// Global scope for onclick
+window.removeIngredientTag = function (ing) {
+    activeIngredients = activeIngredients.filter(i => i !== ing);
+    renderIngredientTags();
+    filterAndRender();
+};
+
+// Show toast notification (replicated from recipe.js for homepage use)
+function showToast(message) {
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => toast.remove(), 2500);
+}
+
+function renderCollectionChips() {
+    const container = document.getElementById('collectionFilters');
+    if (!container) return;
+
+    const collections = Collections.getAll();
+    const sorted = Object.entries(collections).sort((a, b) => a[1].name.localeCompare(b[1].name));
+
+    container.innerHTML = sorted.map(([id, col]) => `
+        <button class="chip" data-collection="${id}">${col.icon} ${col.name}</button>
+    `).join('');
 }
 
 // ========================================

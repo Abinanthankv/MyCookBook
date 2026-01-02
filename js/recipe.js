@@ -288,6 +288,12 @@ function renderRecipeHero(recipe) {
     // Initialize recipe tabs for mobile
     initRecipeTabs();
 
+    // Initialize Cook History
+    initCookHistoryUI(recipe);
+
+    // Initialize Collections Dropdown
+    initCollectionsDropdown(recipe);
+
     // Show play button if video exists
     const playBtn = document.getElementById('playVideoBtn');
     if (playBtn && recipe.videoUrl) {
@@ -373,6 +379,232 @@ function initVideoModal(videoUrl) {
         playerContainer.innerHTML = '';
         document.body.style.overflow = '';
     }
+}
+
+// ========================================
+// Cook History Logic
+// ========================================
+
+function initCookHistoryUI(recipe) {
+    const cookInfo = document.getElementById('cookInfo');
+    const lastCookedDate = document.getElementById('lastCookedDate');
+    const markCookedBtn = document.getElementById('markCookedBtn');
+    const cookLogSection = document.getElementById('cookLogSection');
+    const cookLogList = document.getElementById('cookLogList');
+
+    // Modal elements
+    const historyModal = document.getElementById('historyModal');
+    const closeHistoryModal = document.getElementById('closeHistoryModal');
+    const cancelHistoryBtn = document.getElementById('cancelHistoryBtn');
+    const historyForm = document.getElementById('historyForm');
+    const historyDateInput = document.getElementById('historyDate');
+    const entryIdInput = document.getElementById('entryId');
+    const modalTitle = document.getElementById('modalTitle');
+
+    if (!markCookedBtn) return;
+
+    // --- Core UI Update ---
+    function updateHistoryUI() {
+        const history = CookHistory.get(recipe.id);
+        if (history && history.count > 0) {
+            if (cookInfo) cookInfo.style.display = 'flex';
+            if (cookLogSection) cookLogSection.style.display = 'block';
+
+            // Update counts on all badges
+            document.querySelectorAll('#cookCount').forEach(badge => {
+                badge.textContent = history.count;
+            });
+
+            if (lastCookedDate) {
+                lastCookedDate.textContent = CookHistory.formatLastCooked(recipe.id);
+            }
+
+            renderCookLog(history.entries);
+        } else {
+            if (cookInfo) cookInfo.style.display = 'none';
+            if (cookLogSection) cookLogSection.style.display = 'none';
+            // Also reset badges to 0 if no history
+            document.querySelectorAll('#cookCount').forEach(badge => {
+                badge.textContent = '0';
+            });
+        }
+    }
+
+    function renderCookLog(entries) {
+        if (!cookLogList) return;
+
+        cookLogList.innerHTML = entries.map(entry => `
+            <div class="cook-log-item">
+                <div class="log-entry-info">
+                    <span class="meal-badge ${entry.meal}">${getMealEmoji(entry.meal)} ${entry.meal}</span>
+                    <span class="log-date">${CookHistory.formatDate(entry.date)}</span>
+                </div>
+                <div class="log-actions">
+                    <button class="log-btn edit" data-id="${entry.id}" title="Edit entry">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                        </svg>
+                    </button>
+                    <button class="log-btn delete" data-id="${entry.id}" title="Delete entry">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+        // Action Handlers
+        cookLogList.querySelectorAll('.edit').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const entryId = btn.dataset.id;
+                const entry = entries.find(e => e.id === entryId);
+                openModal(entry);
+            });
+        });
+
+        cookLogList.querySelectorAll('.delete').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const entryId = btn.dataset.id;
+                if (confirm('Are you sure you want to delete this cooking entry?')) {
+                    CookHistory.deleteEntry(recipe.id, entryId);
+                    updateHistoryUI();
+                    showToast('🗑️ Entry deleted from history');
+                }
+            });
+        });
+    }
+
+    function getMealEmoji(meal) {
+        switch (meal) {
+            case 'breakfast': return '🌅';
+            case 'lunch': return '🥗';
+            case 'dinner': return '🍽️';
+            case 'snack': return '🥨';
+            default: return '🍳';
+        }
+    }
+
+    // --- Modal Logic ---
+    function openModal(entry = null) {
+        if (!historyModal) return;
+
+        modalTitle.textContent = entry ? 'Edit Cooking Entry' : 'Add Cooking Entry';
+        entryIdInput.value = entry ? entry.id : '';
+        historyDateInput.value = entry ? entry.date : new Date().toISOString().split('T')[0];
+
+        // Select meal type
+        const mealVal = entry ? entry.meal : 'dinner';
+        const radio = historyForm.querySelector(`input[value="${mealVal}"]`);
+        if (radio) radio.checked = true;
+
+        historyModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        historyModal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    markCookedBtn.addEventListener('click', () => openModal());
+    closeHistoryModal.addEventListener('click', closeModal);
+    cancelHistoryBtn.addEventListener('click', closeModal);
+
+    // Close on click outside modal content
+    historyModal.addEventListener('click', (e) => {
+        if (e.target === historyModal) closeModal();
+    });
+
+    historyForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const date = historyDateInput.value;
+        const meal = historyForm.querySelector('input[name="mealType"]:checked').value;
+        const entryId = entryIdInput.value;
+
+        if (entryId) {
+            CookHistory.updateEntry(recipe.id, entryId, { date, meal });
+            showToast('✅ Cooking entry updated');
+        } else {
+            CookHistory.addEntry(recipe.id, date, meal);
+            showToast('👨‍🍳 Great job! Entry added to history');
+        }
+
+        closeModal();
+        updateHistoryUI();
+
+        // Pulse effect on the button for feedback
+        markCookedBtn.classList.add('pulse');
+        setTimeout(() => markCookedBtn.classList.remove('pulse'), 500);
+    });
+
+    // Initial Render
+    updateHistoryUI();
+}
+
+// ========================================
+// Collections Dropdown Logic
+// ========================================
+
+function initCollectionsDropdown(recipe) {
+    const dropdown = document.getElementById('collectionDropdown');
+    const list = document.getElementById('collectionList');
+    const toggleBtn = document.getElementById('addToCollectionBtn');
+
+    if (!dropdown || !list || !toggleBtn) return;
+
+    // Toggle dropdown
+    toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('active');
+    });
+
+    // Close on click outside
+    document.addEventListener('click', () => {
+        dropdown.classList.remove('active');
+    });
+
+    // Populate collections
+    renderCollectionsList(recipe, list);
+}
+
+function renderCollectionsList(recipe, list) {
+    const collections = Collections.getAll();
+    const sorted = Object.entries(collections).sort((a, b) => a[1].name.localeCompare(b[1].name));
+
+    list.innerHTML = sorted.map(([id, col]) => {
+        const isIn = col.recipes.includes(String(recipe.id)) || col.recipes.includes(Number(recipe.id));
+        return `
+            <button class="dropdown-item ${isIn ? 'active' : ''}" data-id="${id}">
+                <span>${col.icon}</span>
+                <span>${col.name}</span>
+                ${isIn ? '<span style="margin-left:auto">✓</span>' : ''}
+            </button>
+        `;
+    }).join('');
+
+    // Add click handlers
+    list.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const collectionId = item.dataset.id;
+            const isIn = Collections.isInCollection(collectionId, recipe.id);
+
+            if (isIn) {
+                Collections.removeRecipe(collectionId, recipe.id);
+                showToast(`Removed from ${Collections.get(collectionId).name}`);
+            } else {
+                Collections.addRecipe(collectionId, recipe.id);
+                showToast(`Added to ${Collections.get(collectionId).name}`);
+            }
+
+            // Re-render list
+            renderCollectionsList(recipe, list);
+        });
+    });
 }
 
 function renderIngredients(ingredients) {

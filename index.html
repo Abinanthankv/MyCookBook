@@ -23,6 +23,9 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Shared Logic (Theme Init) -->
+  <script src="js/common.js"></script>
 </head>
 
 <body>
@@ -38,39 +41,50 @@
         <a href="index.html" class="nav-link active">Recipes</a>
         <a href="shopping.html" class="nav-link">Shopping List</a>
         <a href="import.html" class="nav-link">Import</a>
+        <a href="settings.html" class="nav-link">Settings</a>
       </nav>
-
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
-        🌙
-      </button>
     </div>
   </header>
 
-  <!-- Hero Section - Mobile First -->
+  <!-- Hero Section - Discovery Driven -->
   <section class="hero-m3">
-    <div class="container">
-      <!-- Welcome Greeting -->
+    <div class="container welcome-container">
       <div class="greeting-section">
-
-        <h1 class="greeting-title">Feeling hungry?</h1>
-        <p class="greeting-subtitle">What are we cooking today?</p>
+        <h1 class="greeting-title">Ready to discover something delicious?</h1>
+        <p class="greeting-subtitle">Start by adding the ingredients you have on hand, and we'll find the perfect
+          recipes for you</p>
       </div>
 
-      <!-- Search Bar - Material 3 Style -->
-      <div class="search-m3">
-        <span class="search-m3-icon">🔍</span>
-        <input type="text" class="search-m3-input" id="searchInput" placeholder="Search recipes, ingredients..."
-          autocomplete="off">
+      <!-- Consolidated Search -->
+      <div class="ingredient-search-container">
+        <div class="search-m2">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="ingredientInput" placeholder="Search by name or add ingredients..." autocomplete="off">
+          <button class="add-ingredient-btn" id="addIngredientBtn">Add</button>
+        </div>
+
+        <div class="active-ingredients" id="activeIngredients">
+          <!-- Ingredient tags will be added here -->
+        </div>
       </div>
 
-      <!-- Category Chips - Material 3 Style -->
+      <!-- Category Chips -->
       <div class="category-chips" id="filters">
         <button class="chip active" data-category="all">✨ All</button>
         <button class="chip" data-category="bookmarks">🔖 Saved</button>
+        <button class="chip" data-category="recently-cooked">🍳 Recent</button>
         <button class="chip" data-category="breakfast">🌅 Breakfast</button>
         <button class="chip" data-category="lunch">🥗 Lunch</button>
         <button class="chip" data-category="dinner">🍽️ Dinner</button>
         <button class="chip" data-category="dessert">🍰 Dessert</button>
+      </div>
+
+      <!-- Collection Chips -->
+      <div class="category-chips collections-chips" id="collectionFilters">
+        <!-- Will be populated by JS -->
+      </div>
+      <div class="collections-actions">
+        <a href="collections.html" class="manage-collections-btn" id="manageCollectionsBtn">⚙️ Manage Collections</a>
       </div>
     </div>
   </section>
@@ -118,6 +132,7 @@
   </footer>
 
   <!-- Scripts -->
+  <script src="js/collections.js"></script>
   <script src="js/app.js"></script>
   <script src="js/shopping.js"></script>
 </body>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings | Cookbook</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .settings-container {
+            max-width: 800px;
+            margin: var(--space-xl) auto;
+            padding: 0 var(--space-md);
+        }
+
+        .settings-card {
+            background: var(--color-bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-md);
+            margin-bottom: var(--space-xl);
+        }
+
+        .settings-title {
+            font-size: var(--font-size-2xl);
+            margin-bottom: var(--space-md);
+            color: var(--color-text);
+        }
+
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+        }
+
+        .theme-card {
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            position: relative;
+            background: #fff;
+            color: #333;
+        }
+
+        .theme-card.active {
+            border-color: var(--color-primary);
+            background: var(--color-primary-soft);
+        }
+
+        .theme-preview {
+            height: 120px;
+            border-radius: var(--radius-sm);
+            margin-bottom: var(--space-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-card h3 {
+            font-size: var(--font-size-lg);
+            margin-bottom: 5px;
+        }
+
+        .theme-card p {
+            font-size: var(--font-size-sm);
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        /* Preview Colors */
+        .preview-fresh {
+            background: #FBFFF1;
+        }
+
+        .preview-fresh .p-1 {
+            background: #2D6A4F;
+            height: 15px;
+            width: 60%;
+            border-radius: 4px;
+        }
+
+        .preview-fresh .p-2 {
+            background: #FF7043;
+            height: 15px;
+            width: 40%;
+            border-radius: 4px;
+        }
+
+        .preview-bistro {
+            background: #1C1B1F;
+        }
+
+        .preview-bistro .p-1 {
+            background: #D0BCFF;
+            height: 15px;
+            width: 60%;
+            border-radius: 4px;
+        }
+
+        .preview-bistro .p-2 {
+            background: #95D5B2;
+            height: 15px;
+            width: 40%;
+            border-radius: 4px;
+        }
+
+        .preview-spice {
+            background: #FFF8F1;
+        }
+
+        .preview-spice .p-1 {
+            background: #A0522D;
+            height: 15px;
+            width: 60%;
+            border-radius: 4px;
+        }
+
+        .preview-spice .p-2 {
+            background: #BC8F8F;
+            height: 15px;
+            width: 40%;
+            border-radius: 4px;
+        }
+
+        .preview-custom {
+            background: #fff;
+            border: 2px dashed var(--color-border);
+        }
+
+        .preview-custom .p-1 {
+            background: #eee;
+            height: 15px;
+            width: 60%;
+            border-radius: 4px;
+        }
+
+        .preview-custom .p-2 {
+            background: #ddd;
+            height: 15px;
+            width: 40%;
+            border-radius: 4px;
+        }
+
+        .color-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+        }
+
+        .color-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+
+        .color-group label {
+            font-weight: 700;
+            font-size: var(--font-size-sm);
+            color: var(--color-text);
+        }
+
+        .color-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: var(--color-bg);
+            padding: var(--space-sm);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-border);
+        }
+
+        .color-input-wrapper input[type="color"] {
+            border: none;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        .color-value {
+            font-family: monospace;
+            font-weight: 700;
+            color: var(--color-text-light);
+            text-transform: uppercase;
+        }
+
+        .editor-actions {
+            margin-top: var(--space-xl);
+            padding-top: var(--space-lg);
+            border-top: 1px solid var(--color-border);
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: var(--space-sm) var(--space-lg);
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all var(--transition-fast);
+        }
+
+        .btn-secondary {
+            background: var(--color-border);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--color-text);
+            font-weight: 600;
+            margin-bottom: var(--space-lg);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🍳</span>
+                <span>Cookbook</span>
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Recipes</a>
+                <a href="shopping.html" class="nav-link">Shopping List</a>
+                <a href="import.html" class="nav-link">Import</a>
+                <a href="settings.html" class="nav-link active">Settings</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="settings-container">
+        <a href="index.html" class="back-btn">← Back to Recipes</a>
+
+        <div class="settings-card">
+            <h1 class="settings-title">App Appearance</h1>
+            <p>Choose a theme that matches your cooking style.</p>
+
+            <div class="theme-grid" id="themeGrid">
+                <!-- Fresh Harvest -->
+                <div class="theme-card" data-theme="fresh-harvest">
+                    <div class="theme-preview preview-fresh">
+                        <div class="p-1"></div>
+                        <div class="p-2"></div>
+                    </div>
+                    <h3>Fresh Harvest</h3>
+                    <p>Organic, vibrant, and energetic. Basil greens and coral oranges.</p>
+                </div>
+
+                <!-- Modern Bistro -->
+                <div class="theme-card" data-theme="modern-bistro">
+                    <div class="theme-preview preview-bistro">
+                        <div class="p-1"></div>
+                        <div class="p-2"></div>
+                    </div>
+                    <h3>Modern Bistro</h3>
+                    <p>Elegant, bold, and sophisticated eggplant purples.</p>
+                </div>
+
+                <!-- Cinnamon & Spice -->
+                <div class="theme-card" data-theme="cinnamon-spice">
+                    <div class="theme-preview preview-spice">
+                        <div class="p-1"></div>
+                        <div class="p-2"></div>
+                    </div>
+                    <h3>Cinnamon & Spice</h3>
+                    <p>Warm, cozy, and nostalgic terracotta tones.</p>
+                </div>
+
+                <!-- Custom -->
+                <div class="theme-card" data-theme="custom">
+                    <div class="theme-preview preview-custom" id="customPreview">
+                        <div class="p-1"></div>
+                        <div class="p-2"></div>
+                    </div>
+                    <h3>Custom Theme</h3>
+                    <p>Create your own unique look with custom colors.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-card" id="themeEditor">
+            <h2 class="settings-title">🎨 Theme Editor</h2>
+            <p>Fine-tune the colors for your active theme.</p>
+
+            <div class="color-controls">
+                <div class="color-group">
+                    <label for="colorPrimary">Primary Color</label>
+                    <div class="color-input-wrapper">
+                        <input type="color" id="colorPrimary">
+                        <span class="color-value" id="valPrimary">#000000</span>
+                    </div>
+                    <small>Main buttons and active states</small>
+                </div>
+
+                <div class="color-group">
+                    <label for="colorSecondary">Secondary Color</label>
+                    <div class="color-input-wrapper">
+                        <input type="color" id="colorSecondary">
+                        <span class="color-value" id="valSecondary">#000000</span>
+                    </div>
+                    <small>Accent tags and highlights</small>
+                </div>
+
+                <div class="color-group">
+                    <label for="colorTertiary">Tertiary Color</label>
+                    <div class="color-input-wrapper">
+                        <input type="color" id="colorTertiary">
+                        <span class="color-value" id="valTertiary">#000000</span>
+                    </div>
+                    <small>Subtle details and ratings</small>
+                </div>
+
+                <div class="color-group">
+                    <label for="colorSurface">Surface / Background</label>
+                    <div class="color-input-wrapper">
+                        <input type="color" id="colorSurface">
+                        <span class="color-value" id="valSurface">#000000</span>
+                    </div>
+                    <small>Page background color</small>
+                </div>
+            </div>
+
+            <div class="editor-actions">
+                <button class="btn btn-secondary" id="resetThemeBtn">Reset to Defaults</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/settings.js"></script>
+</body>
+
+</html>
