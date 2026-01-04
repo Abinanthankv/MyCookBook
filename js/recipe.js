@@ -254,6 +254,26 @@ function renderRecipeHero(recipe) {
         servingsChip.textContent = `👤 ${recipe.servings} serves`;
     }
 
+    // Show edit button for custom recipes
+    const editBtn = document.getElementById('editRecipeBtn');
+    if (editBtn && recipe.isCustom) {
+        editBtn.style.display = 'flex';
+        // Remove any existing listeners to prevent duplicates if re-rendered
+        const newEditBtn = editBtn.cloneNode(true);
+        editBtn.parentNode.replaceChild(newEditBtn, editBtn);
+
+        newEditBtn.addEventListener('click', () => {
+            if (recipe.id) {
+                // Ensure ID is treated safely
+                const safeId = encodeURIComponent(recipe.id);
+                window.location.href = `editor.html?id=${safeId}`;
+            } else {
+                console.error('Cannot edit recipe: Missing ID', recipe);
+                alert('Error: This recipe is missing an ID and cannot be edited.');
+            }
+        });
+    }
+
     // Bookmark button functionality
     if (bookmarkBtn && typeof Bookmarks !== 'undefined') {
         const isBookmarked = Bookmarks.isBookmarked(recipe.id);
@@ -1111,20 +1131,6 @@ function initShoppingButtons(recipe) {
             showToast(`Added ${recipe.ingredients.length} items to list`);
         }
     });
-}
-
-// Show toast notification
-function showToast(message) {
-    // Remove existing toast
-    const existing = document.querySelector('.toast');
-    if (existing) existing.remove();
-
-    const toast = document.createElement('div');
-    toast.className = 'toast';
-    toast.textContent = message;
-    document.body.appendChild(toast);
-
-    setTimeout(() => toast.remove(), 2500);
 }
 
 // ========================================

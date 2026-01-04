@@ -17,219 +17,440 @@
             max-width: 800px;
             margin: var(--space-xl) auto;
             padding: 0 var(--space-md);
+            padding-bottom: 100px;
         }
 
-        .settings-card {
-            background: var(--color-bg-card);
-            border-radius: var(--radius-lg);
-            padding: var(--space-xl);
-            box-shadow: var(--shadow-md);
-            margin-bottom: var(--space-xl);
+        .settings-header {
+            margin-bottom: var(--space-2xl);
+            text-align: center;
         }
 
         .settings-title {
-            font-size: var(--font-size-2xl);
-            margin-bottom: var(--space-md);
-            color: var(--color-text);
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1B4332;
+            margin-bottom: var(--space-xs);
+        }
+
+        .settings-subtitle {
+            color: #7A8C85;
+            font-size: 1.1rem;
+        }
+
+        /* Menu View */
+        .settings-menu {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .menu-item {
+            background: #ffffff;
+            border: 2px solid #E8F5E9;
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-2px);
+            border-color: #2D6A4F;
+            box-shadow: 0 10px 20px rgba(45, 106, 79, 0.08);
+        }
+
+        .menu-item-icon {
+            width: 56px;
+            height: 56px;
+            background: #F0F7F4;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #2D6A4F;
+        }
+
+        .menu-item-content {
+            flex: 1;
+        }
+
+        .menu-item-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1B4332;
+            margin-bottom: 4px;
+        }
+
+        .menu-item-desc {
+            color: #7A8C85;
+            font-size: 0.95rem;
+        }
+
+        .menu-item-arrow {
+            color: #B7D8C8;
+            font-size: 20px;
+        }
+
+        /* Detail View */
+        .category-view {
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .category-view.active {
+            display: block;
+        }
+
+        .back-to-menu {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #40916C;
+            font-weight: 700;
+            margin-bottom: var(--space-xl);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: none;
+            border: none;
+            padding: 0;
+            font-family: inherit;
+        }
+
+        .back-to-menu:hover {
+            color: #2D6A4F;
+            transform: translateX(-4px);
+        }
+
+        /* Existing Card Styles Overrides */
+        .settings-card {
+            background: #ffffff;
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            border: 2px solid #E8F5E9;
+            margin-bottom: var(--space-xl);
+            box-shadow: none;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
         }
 
         .theme-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: var(--space-lg);
-            margin-top: var(--space-xl);
         }
 
         .theme-card {
-            border: 2px solid var(--color-border);
-            border-radius: var(--radius-md);
+            border: 2px solid #E8F5E9;
+            background: #ffffff;
+            border-radius: var(--radius-lg);
             padding: var(--space-md);
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            position: relative;
-            background: var(--color-bg-card);
-            color: var(--color-text);
         }
 
         .theme-card.active {
-            border-color: var(--color-primary);
-            background: var(--color-primary-soft);
+            border-color: #2D6A4F;
+            background: #F0F7F4;
         }
 
-        .theme-preview {
-            height: 120px;
-            border-radius: var(--radius-sm);
-            margin-bottom: var(--space-sm);
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            padding: 10px;
-            border: 1px solid rgba(0, 0, 0, 0.1);
+        /* Import Section Styles */
+        .import-card {
+            border: 2px solid #E8F5E9;
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
         }
 
-        .theme-card h3 {
-            font-size: var(--font-size-lg);
-            margin-bottom: 5px;
+        .file-upload-area {
+            border: 2px dashed #B7D8C8;
+            background: #F0F7F4;
+            border-radius: var(--radius-lg);
+            padding: var(--space-2xl);
+            text-align: center;
+            margin: var(--space-lg) 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        .theme-card p {
-            font-size: var(--font-size-sm);
-            opacity: 0.8;
-            margin-bottom: 15px;
+        .file-upload-area:hover {
+            border-color: #2D6A4F;
+            background: #ffffff;
         }
 
-        /* Preview Colors */
-        .preview-fresh {
-            background: #FBFFF1;
+        .import-textarea {
+            width: 100%;
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            border: 2px solid #E8F5E9;
+            font-family: inherit;
+            margin-bottom: var(--space-md);
         }
 
-        .preview-fresh .p-1 {
-            background: #2D6A4F;
-            height: 15px;
-            width: 60%;
-            border-radius: 4px;
+        .import-input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            border: 2px solid #E8F5E9;
+            margin-bottom: var(--space-md);
         }
 
-        .preview-fresh .p-2 {
-            background: #FF7043;
-            height: 15px;
-            width: 40%;
-            border-radius: 4px;
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .preview-bistro {
-            background: #1C1B1F;
+        /* Personalization Studio - Gallery v3 */
+        .personalization-studio {
+            animation: slideIn 0.5s ease-out;
         }
 
-        .preview-bistro .p-1 {
-            background: #D0BCFF;
-            height: 15px;
-            width: 60%;
-            border-radius: 4px;
+        .studio-header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+            padding: var(--space-xl) 0;
+            background: linear-gradient(135deg, rgba(45, 106, 79, 0.05) 0%, rgba(27, 67, 50, 0.02) 100%);
+            border-radius: var(--radius-2xl);
         }
 
-        .preview-bistro .p-2 {
-            background: #95D5B2;
-            height: 15px;
-            width: 40%;
-            border-radius: 4px;
+        .studio-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #1B4332;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
         }
 
-        .preview-spice {
-            background: #FFF8F1;
+        .studio-subtitle {
+            font-size: 1.1rem;
+            color: #7A8C85;
         }
 
-        .preview-spice .p-1 {
-            background: #A0522D;
-            height: 15px;
-            width: 60%;
-            border-radius: 4px;
-        }
-
-        .preview-spice .p-2 {
-            background: #BC8F8F;
-            height: 15px;
-            width: 40%;
-            border-radius: 4px;
-        }
-
-        .preview-custom {
-            background: #fff;
-            border: 2px dashed var(--color-border);
-        }
-
-        .preview-custom .p-1 {
-            background: #eee;
-            height: 15px;
-            width: 60%;
-            border-radius: 4px;
-        }
-
-        .preview-custom .p-2 {
-            background: #ddd;
-            height: 15px;
-            width: 40%;
-            border-radius: 4px;
-        }
-
-        .color-controls {
+        .themes-gallery-v3 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--space-lg);
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--space-2xl);
             margin-top: var(--space-xl);
         }
 
-        .color-group {
+        .theme-card-v3 {
+            background: #ffffff;
+            border-radius: var(--radius-2xl);
+            padding: var(--space-lg);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #E8F5E9;
             display: flex;
             flex-direction: column;
-            gap: var(--space-xs);
+            gap: var(--space-lg);
+            position: relative;
+            overflow: hidden;
         }
 
-        .color-group label {
-            font-weight: 700;
-            font-size: var(--font-size-sm);
-            color: var(--color-text);
+        .theme-card-v3:hover {
+            transform: translateY(-12px) scale(1.02);
+            border-color: var(--theme-color-primary, #2D6A4F);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08),
+                0 10px 20px var(--theme-aura, rgba(45, 106, 79, 0.1));
         }
 
-        .color-input-wrapper {
+        .theme-card-v3.active {
+            border-width: 3px;
+            border-color: var(--theme-color-primary, #2D6A4F);
+            padding: calc(var(--space-lg) - 2px);
+            background: #F0F7F4;
+        }
+
+        /* Palette Swatches */
+        .theme-palette {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            height: 60px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .swatch {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+
+        .theme-card-v3:hover .swatch {
+            transform: scale(1.1);
+        }
+
+        .theme-info-v3 {
             display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-            background: var(--color-bg);
-            padding: var(--space-sm);
-            border-radius: var(--radius-md);
-            border: 1px solid var(--color-border);
+            justify-content: space-between;
+            align-items: flex-end;
         }
 
-        .color-input-wrapper input[type="color"] {
-            border: none;
+        .theme-meta-v3 h3 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #1B4332;
+            margin-bottom: 4px;
+        }
+
+        .theme-meta-v3 p {
+            font-size: 0.9rem;
+            color: #7A8C85;
+        }
+
+        .active-check-v3 {
             width: 40px;
             height: 40px;
-            cursor: pointer;
-            background: transparent;
+            border-radius: 50%;
+            background: #2D6A4F;
+            color: white;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(45, 106, 79, 0.2);
         }
 
-        .color-value {
-            font-family: monospace;
-            font-weight: 700;
-            color: var(--color-text-light);
-            text-transform: uppercase;
-        }
-
-        .editor-actions {
-            margin-top: var(--space-xl);
-            padding-top: var(--space-lg);
-            border-top: 1px solid var(--color-border);
+        .theme-card-v3.active .active-check-v3 {
             display: flex;
-            justify-content: flex-end;
         }
 
-        .btn {
-            padding: var(--space-sm) var(--space-lg);
-            border-radius: var(--radius-full);
-            font-weight: 700;
+        /* Designer Studio Overhaul */
+        .designer-studio {
+            margin-top: var(--space-3xl);
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: var(--space-2xl);
+            align-items: flex-start;
+        }
+
+        .studio-controls {
+            background: #ffffff;
+            border-radius: var(--radius-2xl);
+            padding: var(--space-2xl);
+            border: 1px solid #E8F5E9;
+        }
+
+        .studio-preview-sticky {
+            position: sticky;
+            top: 100px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-2xl);
+            padding: var(--space-xl);
+            border: 2px solid #E8F5E9;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .ink-droplet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--space-xl);
+        }
+
+        .ink-droplet {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: var(--space-lg);
+            background: #F8FAF9;
+            border-radius: var(--radius-xl);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .ink-droplet:focus-within {
+            background: #fff;
+            box-shadow: 0 10px 25px rgba(45, 106, 79, 0.08);
+            transform: translateY(-4px);
+        }
+
+        .droplet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .droplet-label {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #1B4332;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .droplet-hex {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #2D6A4F;
+            background: #fff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid #E8F5E9;
+        }
+
+        .droplet-input-wrapper {
+            position: relative;
+            height: 48px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .droplet-picker {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
             cursor: pointer;
             border: none;
-            transition: all var(--transition-fast);
+            padding: 0;
+            background: none;
         }
 
-        .btn-secondary {
-            background: var(--color-border);
-            color: var(--color-text);
+        @media (max-width: 1000px) {
+            .designer-studio {
+                grid-template-columns: 1fr;
+            }
+
+            .studio-preview-sticky {
+                position: static;
+                margin-bottom: var(--space-xl);
+            }
         }
 
-        .btn-secondary:hover {
-            background: rgba(0, 0, 0, 0.1);
-        }
+        @media (max-width: 600px) {
+            .studio-title {
+                font-size: 1.8rem;
+            }
 
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: var(--color-text);
-            font-weight: 600;
-            margin-bottom: var(--space-lg);
+            .themes-gallery-v3 {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -245,106 +466,345 @@
                 <a href="index.html" class="nav-link">Recipes</a>
                 <a href="shopping.html" class="nav-link">Shopping List</a>
                 <a href="meal-plan.html" class="nav-link">Meal Plan</a>
-                <a href="import.html" class="nav-link">Import</a>
                 <a href="settings.html" class="nav-link active">Settings</a>
             </nav>
         </div>
     </header>
 
     <main class="settings-container">
-        <a href="index.html" class="back-btn">← Back to Recipes</a>
+        <!-- Main Settings Menu -->
+        <div id="settingsMenu" class="settings-menu active">
+            <div class="settings-header">
+                <h1 class="settings-title">App Settings</h1>
+                <p class="settings-subtitle">Personalize your cooking experience</p>
+            </div>
 
-        <div class="settings-card">
-            <h1 class="settings-title">App Appearance</h1>
-            <p>Choose a theme that matches your cooking style.</p>
+            <div class="menu-item" onclick="showCategory('appearance')">
+                <div class="menu-item-icon">🎨</div>
+                <div class="menu-item-content">
+                    <h2 class="menu-item-title">Appearance</h2>
+                    <p class="menu-item-desc">Themes, colors, and global personalization</p>
+                </div>
+                <div class="menu-item-arrow">›</div>
+            </div>
 
-            <div class="theme-grid" id="themeGrid">
-                <!-- Fresh Harvest -->
-                <div class="theme-card" data-theme="fresh-harvest">
-                    <div class="theme-preview preview-fresh">
-                        <div class="p-1"></div>
-                        <div class="p-2"></div>
+            <div class="menu-item" onclick="showCategory('data')">
+                <div class="menu-item-icon">💾</div>
+                <div class="menu-item-content">
+                    <h2 class="menu-item-title">Data Management</h2>
+                    <p class="menu-item-desc">Import/export recipes and backup data</p>
+                </div>
+                <div class="menu-item-arrow">›</div>
+            </div>
+
+            <div class="menu-item" onclick="showCategory('about')">
+                <div class="menu-item-icon">ℹ️</div>
+                <div class="menu-item-content">
+                    <h2 class="menu-item-title">About Cookbook</h2>
+                    <p class="menu-item-desc">Version 2.5.0 • Live Updates Enabled</p>
+                </div>
+                <div class="menu-item-arrow">›</div>
+            </div>
+        </div>
+
+        <!-- Appearance Category -->
+        <div id="cat-appearance" class="category-view">
+            <div class="personalization-studio">
+                <button class="back-to-menu" onclick="showMenu()">← Settings Menu</button>
+
+                <header class="studio-header">
+                    <h1 class="studio-title">Personalization Studio</h1>
+                    <p class="studio-subtitle">Choose a signature style for your digital kitchen.</p>
+                </header>
+
+                <!-- Themes Gallery v3 -->
+                <div class="themes-gallery-v3" id="themeGrid">
+                    <!-- Zesty Garden -->
+                    <div class="theme-card-v3 magnetic-hover aura-shadow" data-theme="zesty-garden"
+                        style="--theme-aura: rgba(45, 106, 79, 0.2); --theme-color-primary: #2D6A4F;">
+                        <div class="theme-palette">
+                            <div class="swatch swatch-glow" style="background: #2D6A4F;"></div>
+                            <div class="swatch swatch-glow" style="background: #B7E4C7;"></div>
+                            <div class="swatch swatch-glow" style="background: #FFD60A;"></div>
+                            <div class="swatch swatch-glow" style="background: #FBFFF1;"></div>
+                        </div>
+                        <div class="theme-info-v3">
+                            <div class="theme-meta-v3">
+                                <h3>Zesty Garden</h3>
+                                <p>Fresh, healthy & organic tones</p>
+                            </div>
+                            <div class="active-check-v3">✓</div>
+                        </div>
                     </div>
-                    <h3>Fresh Harvest</h3>
-                    <p>Organic, vibrant, and energetic. Basil greens and coral oranges.</p>
+
+                    <!-- Rustic Hearth -->
+                    <div class="theme-card-v3 magnetic-hover aura-shadow" data-theme="rustic-hearth"
+                        style="--theme-aura: rgba(188, 71, 73, 0.2); --theme-color-primary: #BC4749;">
+                        <div class="theme-palette">
+                            <div class="swatch swatch-glow" style="background: #BC4749;"></div>
+                            <div class="swatch swatch-glow" style="background: #DDB892;"></div>
+                            <div class="swatch swatch-glow" style="background: #A44A3F;"></div>
+                            <div class="swatch swatch-glow" style="background: #FFF8F1;"></div>
+                        </div>
+                        <div class="theme-info-v3">
+                            <div class="theme-meta-v3">
+                                <h3>Rustic Hearth</h3>
+                                <p>Warm, comforting & cozy vibes</p>
+                            </div>
+                            <div class="active-check-v3">✓</div>
+                        </div>
+                    </div>
+
+                    <!-- Modern Bistro -->
+                    <div class="theme-card-v3 magnetic-hover aura-shadow" data-theme="modern-bistro"
+                        style="--theme-aura: rgba(109, 33, 60, 0.2); --theme-color-primary: #6D213C;">
+                        <div class="theme-palette">
+                            <div class="swatch swatch-glow" style="background: #6D213C;"></div>
+                            <div class="swatch swatch-glow" style="background: #F5EBE0;"></div>
+                            <div class="swatch swatch-glow" style="background: #D4A373;"></div>
+                            <div class="swatch swatch-glow" style="background: #FAFAFA;"></div>
+                        </div>
+                        <div class="theme-info-v3">
+                            <div class="theme-meta-v3">
+                                <h3>Modern Bistro</h3>
+                                <p>Clean, sophisticated & premium</p>
+                            </div>
+                            <div class="active-check-v3">✓</div>
+                        </div>
+                    </div>
+
+                    <!-- Custom Designer -->
+                    <div class="theme-card-v3 magnetic-hover aura-shadow" data-theme="custom"
+                        style="--theme-aura: rgba(45, 106, 79, 0.1);">
+                        <div class="theme-palette" id="customPalettePreview">
+                            <div class="swatch swatch-glow" style="background: #ddd;"></div>
+                            <div class="swatch swatch-glow" style="background: #eee;"></div>
+                            <div class="swatch swatch-glow" style="background: #f5f5f5;"></div>
+                            <div class="swatch swatch-glow" style="background: #fff;"></div>
+                        </div>
+                        <div class="theme-info-v3">
+                            <div class="theme-meta-v3">
+                                <h3>Designer Studio</h3>
+                                <p>Build your own custom palette</p>
+                            </div>
+                            <div class="active-check-v3">🎨</div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Modern Bistro -->
-                <div class="theme-card" data-theme="modern-bistro">
-                    <div class="theme-preview preview-bistro">
-                        <div class="p-1"></div>
-                        <div class="p-2"></div>
-                    </div>
-                    <h3>Modern Bistro</h3>
-                    <p>Elegant, bold, and sophisticated eggplant purples.</p>
-                </div>
+                <!-- Designer Studio Section -->
+                <div class="designer-studio" id="themeEditor">
+                    <div class="studio-controls">
+                        <header class="card-header" style="margin-bottom: var(--space-xl);">
+                            <span class="card-icon">🧪</span>
+                            <h2 class="settings-title" style="margin: 0;">Color Laboratory</h2>
+                        </header>
 
-                <!-- Cinnamon & Spice -->
-                <div class="theme-card" data-theme="cinnamon-spice">
-                    <div class="theme-preview preview-spice">
-                        <div class="p-1"></div>
-                        <div class="p-2"></div>
-                    </div>
-                    <h3>Cinnamon & Spice</h3>
-                    <p>Warm, cozy, and nostalgic terracotta tones.</p>
-                </div>
+                        <div class="ink-droplet-grid">
+                            <!-- Primary -->
+                            <div class="ink-droplet">
+                                <div class="droplet-header">
+                                    <span class="droplet-label">Primary</span>
+                                    <span class="droplet-hex" id="valPrimary">#2D6A4F</span>
+                                </div>
+                                <div class="droplet-input-wrapper">
+                                    <input type="color" id="colorPrimary" class="droplet-picker">
+                                </div>
+                            </div>
 
-                <!-- Custom -->
-                <div class="theme-card" data-theme="custom">
-                    <div class="theme-preview preview-custom" id="customPreview">
-                        <div class="p-1"></div>
-                        <div class="p-2"></div>
+                            <!-- Secondary -->
+                            <div class="ink-droplet">
+                                <div class="droplet-header">
+                                    <span class="droplet-label">Secondary</span>
+                                    <span class="droplet-hex" id="valSecondary">#52B788</span>
+                                </div>
+                                <div class="droplet-input-wrapper">
+                                    <input type="color" id="colorSecondary" class="droplet-picker">
+                                </div>
+                            </div>
+
+                            <!-- Tertiary -->
+                            <div class="ink-droplet">
+                                <div class="droplet-header">
+                                    <span class="droplet-label">Tertiary</span>
+                                    <span class="droplet-hex" id="valTertiary">#95D5B2</span>
+                                </div>
+                                <div class="droplet-input-wrapper">
+                                    <input type="color" id="colorTertiary" class="droplet-picker">
+                                </div>
+                            </div>
+
+                            <!-- Surface -->
+                            <div class="ink-droplet">
+                                <div class="droplet-header">
+                                    <span class="droplet-label">Background</span>
+                                    <span class="droplet-hex" id="valSurface">#FBFFF1</span>
+                                </div>
+                                <div class="droplet-input-wrapper">
+                                    <input type="color" id="colorSurface" class="droplet-picker">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: var(--space-2xl); display: flex; gap: var(--space-md);">
+                            <button class="modern-btn secondary" id="resetThemeBtn">Reset All Lab Defaults</button>
+                        </div>
                     </div>
-                    <h3>Custom Theme</h3>
-                    <p>Create your own unique look with custom colors.</p>
+
+                    <aside class="studio-preview-sticky">
+                        <h4
+                            style="font-size: 0.8rem; text-transform: uppercase; color: #7A8C85; letter-spacing: 1px; margin-bottom: 20px;">
+                            Live Studio Preview</h4>
+                        <div
+                            style="background: var(--color-bg); border-radius: 16px; overflow: hidden; border: 1px solid var(--color-border); box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: all 0.4s ease;">
+                            <!-- Mock Header -->
+                            <div
+                                style="height: 40px; background: var(--color-primary); padding: 0 15px; display: flex; align-items: center; justify-content: space-between;">
+                                <div
+                                    style="width: 20px; height: 2px; background: #fff; box-shadow: 0 4px 0 #fff, 0 -4px 0 #fff;">
+                                </div>
+                                <div
+                                    style="width: 50px; height: 10px; background: rgba(255,255,255,0.3); border-radius: 5px;">
+                                </div>
+                            </div>
+                            <!-- Mock List -->
+                            <div
+                                style="padding: 15px; display: flex; flex-direction: column; gap: 12px; position: relative; min-height: 180px;">
+                                <div
+                                    style="padding: 12px; background: #fff; border-radius: 12px; border: 1px solid var(--color-border); display: flex; gap: 10px; align-items: center;">
+                                    <div
+                                        style="width: 30px; height: 30px; background: var(--color-tertiary); border-radius: 8px;">
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <div
+                                            style="height: 8px; width: 70%; background: var(--color-text); opacity: 0.8; border-radius: 4px; margin-bottom: 6px;">
+                                        </div>
+                                        <div
+                                            style="height: 6px; width: 40%; background: var(--color-text); opacity: 0.4; border-radius: 3px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    style="padding: 12px; background: #fff; border-radius: 12px; border: 1px solid var(--color-border); display: flex; gap: 10px; align-items: center;">
+                                    <div
+                                        style="width: 30px; height: 30px; background: var(--color-secondary); border-radius: 8px;">
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <div
+                                            style="height: 8px; width: 50%; background: var(--color-text); opacity: 0.8; border-radius: 4px; margin-bottom: 6px;">
+                                        </div>
+                                        <div
+                                            style="height: 6px; width: 30%; background: var(--color-text); opacity: 0.4; border-radius: 3px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Mock FAB -->
+                                <div
+                                    style="position: absolute; bottom: 15px; right: 15px; width: 36px; height: 36px; background: var(--color-primary); border-radius: 50%; box-shadow: 0 10px 20px var(--theme-aura, rgba(45,106,79,0.3)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; font-weight: bold;">
+                                    +</div>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.75rem; color: #7A8C85; margin-top: 15px;">Experience your palette choices
+                            in a simulated interface.</p>
+                    </aside>
                 </div>
             </div>
         </div>
 
-        <div class="settings-card" id="themeEditor">
-            <h2 class="settings-title">🎨 Theme Editor</h2>
-            <p>Fine-tune the colors for your active theme.</p>
+        <!-- Data Category -->
+        <div id="cat-data" class="category-view">
+            <button class="back-to-menu" onclick="showMenu()">← Settings Menu</button>
 
-            <div class="color-controls">
-                <div class="color-group">
-                    <label for="colorPrimary">Primary Color</label>
-                    <div class="color-input-wrapper">
-                        <input type="color" id="colorPrimary">
-                        <span class="color-value" id="valPrimary">#000000</span>
-                    </div>
-                    <small>Main buttons and active states</small>
+            <div class="settings-card">
+                <div class="card-header">
+                    <span class="card-icon">📤</span>
+                    <h2 class="settings-title">Backup & Export</h2>
+                </div>
+                <p>Download all your custom recipes as a JSON file to keep them safe.</p>
+                <button class="modern-btn primary" id="exportAllBtn" style="margin-top: var(--space-md);">
+                    📥 Download JSON backup
+                </button>
+            </div>
+
+            <div class="settings-card">
+                <div class="card-header">
+                    <span class="card-icon">📥</span>
+                    <h2 class="settings-title">Import Recipes</h2>
+                </div>
+                <div class="file-upload-area" id="dropZone" style="margin-top: 0;">
+                    <input type="file" id="fileInput" accept=".json" hidden>
+                    <div class="upload-icon" style="font-size: 2rem; margin-bottom: 10px;">📁</div>
+                    <p class="upload-text">Drag & drop a recipe JSON file here</p>
+                    <button class="modern-btn primary" id="browseBtn"
+                        style="margin-top: 15px; width: auto; padding: 10px 24px;">Browse Files</button>
                 </div>
 
-                <div class="color-group">
-                    <label for="colorSecondary">Secondary Color</label>
-                    <div class="color-input-wrapper">
-                        <input type="color" id="colorSecondary">
-                        <span class="color-value" id="valSecondary">#000000</span>
-                    </div>
-                    <small>Accent tags and highlights</small>
+                <div class="paste-divider"
+                    style="text-align: center; margin: 20px 0; color: #7A8C85; font-size: 0.9rem;">
+                    <span>— OR PASTE JSON —</span>
                 </div>
 
-                <div class="color-group">
-                    <label for="colorTertiary">Tertiary Color</label>
-                    <div class="color-input-wrapper">
-                        <input type="color" id="colorTertiary">
-                        <span class="color-value" id="valTertiary">#000000</span>
-                    </div>
-                    <small>Subtle details and ratings</small>
+                <textarea id="pasteJsonInput" class="import-textarea" rows="6"
+                    placeholder='Paste recipe JSON here...'></textarea>
+                <button class="modern-btn secondary" id="importPastedJson" style="width: 100%;">📥 Import from
+                    Text</button>
+            </div>
+
+            <div class="settings-card">
+                <div class="card-header">
+                    <span class="card-icon">✨</span>
+                    <h2 class="settings-title">YouTube Transformer</h2>
+                </div>
+                <p>Convert YouTube cooking videos into recipe prompt cards.</p>
+                <div class="url-input-group" style="margin-top: var(--space-md);">
+                    <input type="url" id="youtubeUrl" class="import-input" placeholder="Paste YouTube URL here...">
+                    <button class="modern-btn primary" id="generatePromptBtn" style="width: 100%;">Generate AI
+                        Prompt</button>
                 </div>
 
-                <div class="color-group">
-                    <label for="colorSurface">Surface / Background</label>
-                    <div class="color-input-wrapper">
-                        <input type="color" id="colorSurface">
-                        <span class="color-value" id="valSurface">#000000</span>
-                    </div>
-                    <small>Page background color</small>
+                <div id="promptOutput" style="display: none; margin-top: 20px;">
+                    <textarea id="generatedPrompt" class="import-textarea" rows="8" readonly></textarea>
+                    <button class="modern-btn secondary" id="copyPromptBtn" style="width: 100%;">📋 Copy Prompt</button>
                 </div>
             </div>
 
-            <div class="editor-actions">
-                <button class="btn btn-secondary" id="resetThemeBtn">Reset to Defaults</button>
+            <!-- Recipe Preview Modal (Hidden) -->
+            <div id="recipePreview"
+                style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px;">
+                <div class="settings-card"
+                    style="max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; margin: 0;">
+                    <h2 class="settings-title">Import Preview</h2>
+                    <div id="previewContent">
+                        <div class="form-field">
+                            <label class="field-label">TITLE</label>
+                            <input type="text" id="previewTitle" class="modern-input">
+                        </div>
+                        <textarea id="previewDescription" class="modern-textarea" style="margin-top: 10px;"></textarea>
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button class="modern-btn secondary"
+                            onclick="document.getElementById('recipePreview').style.display='none'"
+                            style="flex: 1;">Cancel</button>
+                        <button class="modern-btn primary" id="saveRecipe" style="flex: 2;">Save Recipe</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Category -->
+        <div id="cat-about" class="category-view">
+            <button class="back-to-menu" onclick="showMenu()">← Settings Menu</button>
+            <div class="settings-card" style="text-align: center; padding: var(--space-3xl) var(--space-xl);">
+                <div class="logo-icon" style="font-size: 4rem; margin-bottom: var(--space-lg);">🍳</div>
+                <h2 class="settings-title">Cookbook v2.0</h2>
+                <p style="margin-bottom: var(--space-xl);">Your ultimate kitchen companion.</p>
+
+                <div
+                    style="text-align: left; background: #F0F7F4; padding: var(--space-lg); border-radius: var(--radius-lg);">
+                    <h3 style="color: #2D6A4F; margin-bottom: 10px;">Credits</h3>
+                    <p style="font-size: 0.9rem; color: #7A8C85;">Designed and developed with modern web standards to
+                        make cooking accessible and organized for everyone.</p>
+                </div>
             </div>
         </div>
     </main>
@@ -360,13 +820,12 @@
             <span class="bottom-nav-label">Shopping</span>
             <span class="bottom-nav-badge" id="shoppingBadge"></span>
         </a>
+        <a href="editor.html" class="bottom-nav-fab" title="Create New Recipe">
+            <div class="fab-circle">＋</div>
+        </a>
         <a href="meal-plan.html" class="bottom-nav-item">
             <span class="bottom-nav-icon">📅</span>
             <span class="bottom-nav-label">Meal Plan</span>
-        </a>
-        <a href="import.html" class="bottom-nav-item">
-            <span class="bottom-nav-icon">➕</span>
-            <span class="bottom-nav-label">Import</span>
         </a>
         <a href="settings.html" class="bottom-nav-item active">
             <span class="bottom-nav-icon">⚙️</span>

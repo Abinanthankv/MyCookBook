@@ -2,35 +2,6 @@
  * Cookbook Site - JSON Recipe Import
  */
 
-// ========================================
-// Custom Recipes Storage
-// ========================================
-
-const CustomRecipes = {
-    STORAGE_KEY: 'cookbook-custom-recipes',
-
-    getAll() {
-        const data = localStorage.getItem(this.STORAGE_KEY);
-        return data ? JSON.parse(data) : [];
-    },
-
-    save(recipe) {
-        const recipes = this.getAll();
-        // Generate unique ID with timestamp + random suffix
-        recipe.id = 'custom-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-        recipe.isCustom = true;
-        recipes.push(recipe);
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(recipes));
-        return recipe;
-    },
-
-    delete(id) {
-        let recipes = this.getAll();
-        recipes = recipes.filter(r => r.id !== id);
-        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(recipes));
-    }
-};
-
 // Store the original recipe for preserving all fields
 let originalRecipe = null;
 
@@ -236,6 +207,7 @@ function getRecipeFromForm() {
     }
 
     return {
+        // important: Allow overwriting if original had an ID, effectively updating it
         id: originalRecipe?.id || null,
         title,
         description,

@@ -4,6 +4,8 @@
 
 /* CSS Variables - Design Tokens */
 :root {
+  /* Smooth transitions for theme switching */
+  --theme-transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   /* Colors - Light Mode */
   --color-primary: #e67e22;
   --color-primary-dark: #d35400;
@@ -73,76 +75,60 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
-/* 1. Fresh Harvest (Organic & Vibrant) */
-[data-theme="fresh-harvest"] {
+[data-theme="zesty-garden"] {
   --color-primary: #2D6A4F;
   --color-primary-dark: #1B4332;
-  --color-primary-light: #40916C;
+  --color-primary-light: #52B788;
   --color-primary-soft: rgba(45, 106, 79, 0.1);
-  --color-secondary: #FF7043;
-  --color-accent: #FF7043;
+  --color-secondary: #B7E4C7;
+  --color-tertiary: #FFD60A;
   --color-bg: #FBFFF1;
   --color-bg-card: #ffffff;
-  --color-bg-glass: rgba(251, 255, 241, 0.8);
   --color-text: #1B4332;
-  --color-text-light: #40916C;
-  --color-border: rgba(45, 106, 79, 0.15);
-  --color-tertiary: #F4E285;
-  --color-error: #B00020;
+  --color-text-light: #52B788;
+  --color-border: #D8F3DC;
 }
 
-/* 2. Modern Bistro (Elegant & Bold) */
-[data-theme="modern-bistro"] {
-  --color-primary: #D0BCFF;
-  /* M3 Light Purple for contrast on dark */
-  --color-primary-dark: #6750A4;
-  --color-primary-light: #EADDFF;
-  --color-primary-soft: rgba(208, 188, 255, 0.15);
-  --color-secondary: #95D5B2;
-  --color-accent: #95D5B2;
-  --color-bg: #1C1B1F;
-  --color-bg-card: #2B2930;
-  --color-bg-glass: rgba(28, 27, 31, 0.8);
-  --color-text: #E6E1E5;
-  --color-text-light: #938F99;
-  --color-border: rgba(255, 255, 255, 0.1);
-  --color-tertiary: #FFB4AB;
-  --color-error: #F2B8B5;
-}
-
-/* 3. Cinnamon & Spice (Warm & Cozy) */
-[data-theme="cinnamon-spice"] {
-  --color-primary: #A0522D;
-  --color-primary-dark: #7B3F24;
-  --color-primary-light: #BC8F8F;
-  --color-primary-soft: rgba(160, 82, 45, 0.1);
-  --color-secondary: #BC8F8F;
-  --color-accent: #BC8F8F;
+[data-theme="rustic-hearth"] {
+  --color-primary: #BC4749;
+  --color-primary-dark: #6A1B1C;
+  --color-primary-light: #D95D5F;
+  --color-primary-soft: rgba(188, 71, 73, 0.1);
+  --color-secondary: #DDB892;
+  --color-tertiary: #A44A3F;
   --color-bg: #FFF8F1;
   --color-bg-card: #ffffff;
-  --color-bg-glass: rgba(255, 248, 241, 0.8);
-  --color-text: #4A4431;
-  --color-text-light: #7B735F;
-  --color-border: #F7DDC5;
-  --color-container: #F7DDC5;
-  --color-tertiary: #4A4431;
+  --color-text: #3D2B1F;
+  --color-text-light: #7F5539;
+  --color-border: #EDE0D4;
 }
 
-/* 4. Custom (Starting Point) */
-[data-theme="custom"] {
-  --color-primary: #e67e22;
-  /* Default brand orange */
-  --color-primary-dark: #d35400;
-  --color-primary-light: #f39c12;
-  --color-primary-soft: rgba(230, 126, 34, 0.1);
-  --color-secondary: #2c3e50;
-  --color-accent: #27ae60;
-  --color-bg: #ffffff;
+[data-theme="modern-bistro"] {
+  --color-primary: #6D213C;
+  --color-primary-dark: #4A1629;
+  --color-primary-light: #8E2C4E;
+  --color-primary-soft: rgba(109, 33, 60, 0.1);
+  --color-secondary: #F5EBE0;
+  --color-tertiary: #D4A373;
+  --color-bg: #FAFAFA;
   --color-bg-card: #ffffff;
-  --color-bg-glass: rgba(255, 255, 255, 0.8);
-  --color-text: #2c3e50;
-  --color-text-light: #7f8c8d;
-  --color-border: rgba(0, 0, 0, 0.1);
+  --color-text: #1A1A1A;
+  --color-text-light: #666666;
+  --color-border: #E5E5E5;
+}
+
+[data-theme="custom"] {
+  --color-primary: #2D6A4F;
+  --color-primary-dark: #1B4332;
+  --color-primary-light: #52B788;
+  --color-primary-soft: rgba(45, 106, 79, 0.1);
+  --color-secondary: #B7E4C7;
+  --color-tertiary: #FFD60A;
+  --color-bg: #FBFFF1;
+  --color-bg-card: #ffffff;
+  --color-text: #1B4332;
+  --color-text-light: #52B788;
+  --color-border: #D8F3DC;
 }
 
 /* ========================================
@@ -1554,7 +1540,7 @@ ol {
 }
 
 /* ========================================
-   Bottom Navigation
+   Bottom Navigation - Redesigned
    ======================================== */
 
 .bottom-nav {
@@ -1562,39 +1548,86 @@ ol {
   bottom: 0;
   left: 0;
   right: 0;
-  background: var(--color-bg-card);
-  border-top: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
-  justify-content: space-around;
-  padding: var(--space-sm) 0;
-  padding-bottom: calc(var(--space-sm) + env(safe-area-inset-bottom));
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 var(--space-md);
+  padding-bottom: env(safe-area-inset-bottom);
+  height: 64px;
   z-index: 1000;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .bottom-nav-item {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 2px;
-  padding: var(--space-xs) var(--space-lg);
-  color: var(--color-text-light);
+  color: #7A8C85;
   text-decoration: none;
-  transition: all var(--transition-fast);
+  transition: all 0.2s ease;
   position: relative;
 }
 
 .bottom-nav-item.active {
-  color: var(--color-primary);
+  color: #2D6A4F;
 }
 
 .bottom-nav-icon {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
+  transition: transform 0.2s ease;
+}
+
+.bottom-nav-item:active .bottom-nav-icon {
+  transform: scale(0.9);
 }
 
 .bottom-nav-label {
-  font-size: var(--font-size-xs);
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Centered FAB in Nav */
+.bottom-nav-fab {
+  position: relative;
+  z-index: 1001;
+  margin-top: -32px;
+  /* Pull it up */
+}
+
+.fab-circle {
+  width: 56px;
+  height: 56px;
+  background: #2D6A4F;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  box-shadow: 0 8px 16px rgba(45, 106, 79, 0.3);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 4px solid #ffffff;
+}
+
+.bottom-nav-fab:hover .fab-circle {
+  transform: scale(1.1) translateY(-4px);
+  background: #1B4332;
+  box-shadow: 0 12px 24px rgba(45, 106, 79, 0.4);
+}
+
+@media (min-width: 768px) {
+  .bottom-nav {
+    display: none;
+    /* Hide on desktop, use header nav */
+  }
 }
 
 .bottom-nav-badge {
@@ -1708,6 +1741,80 @@ ol {
 
 .btn-danger:hover {
   background: #c0392b;
+}
+
+/* Modern Button System */
+.modern-btn {
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--theme-transition);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modern-btn.primary {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  box-shadow: 0 4px 12px var(--color-primary-soft);
+}
+
+.modern-btn.secondary {
+  background: #F0F7F4;
+  color: #2D6A4F;
+  border: 1px solid #E8F5E9;
+}
+
+.modern-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.modern-btn:active {
+  transform: translateY(0);
+}
+
+/* Personalization Studio Extensions */
+.aura-shadow {
+  box-shadow: 0 20px 40px var(--theme-aura, rgba(0, 0, 0, 0.05));
+  transition: box-shadow 0.4s ease;
+}
+
+.magnetic-hover {
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    box-shadow 0.4s ease;
+}
+
+.magnetic-hover:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+.swatch-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.swatch-glow::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.theme-card-v3:hover .swatch-glow::after {
+  opacity: 1;
 }
 
 .shopping-group {
@@ -2721,42 +2828,6 @@ ol {
   }
 }
 
-/* ========================================
-   Nutrition Card
-   ======================================== */
-
-.nutrition-card {
-  display: flex;
-  justify-content: space-between;
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-md);
-  margin: var(--space-md) 0;
-}
-
-.nutrition-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 2px;
-}
-
-.nutrition-icon {
-  font-size: 1.25rem;
-}
-
-.nutrition-value {
-  font-size: var(--font-size-lg);
-  font-weight: 700;
-  color: var(--color-text);
-}
-
-.nutrition-label {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-light);
-}
 
 /* ========================================
    Mobile Recipe Page Layout
@@ -4169,4 +4240,738 @@ ol {
   .bottom-nav-icon {
     font-size: 18px;
   }
+}
+
+/* ========================================
+   Nutrition Dashboard
+   ======================================== */
+
+.nutrition-dashboard-section {
+  margin-bottom: var(--space-2xl);
+}
+
+.nutrition-dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "daily weekly"
+    "contrib contrib";
+  gap: var(--space-xl);
+}
+
+.nutrition-card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: row;
+  /* Row for recipe page items */
+  justify-content: space-around;
+  margin: var(--space-md) 0;
+}
+
+/* Dashboard summary cards need vertical stacking of header and stats */
+.nutrition-card.daily,
+.nutrition-card.weekly {
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.nutrition-card.daily {
+  grid-area: daily;
+}
+
+.nutrition-card.weekly {
+  grid-area: weekly;
+}
+
+.nutrition-card.contributions {
+  grid-area: contrib;
+  flex-direction: column;
+}
+
+.nutrition-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+}
+
+.nutrition-card .section-title {
+  margin-bottom: 0;
+  font-size: var(--font-size-lg);
+  font-weight: 800;
+}
+
+.week-label,
+.date-label {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--color-bg);
+  color: var(--color-primary);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+}
+
+.nutrition-stats-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+}
+
+.stat-label {
+  color: var(--color-text-light);
+}
+
+.stat-value {
+  color: var(--color-text);
+}
+
+.progress-bar {
+  height: 6px;
+  background: var(--color-bg);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  border: 1px solid var(--color-border-soft);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-fill.calories {
+  background: var(--color-primary);
+}
+
+.progress-fill.protein {
+  background: #4D96FF;
+}
+
+.progress-fill.carbs {
+  background: #6BCB77;
+}
+
+/* Recipe Page Nutrition Items */
+.nutrition-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 4px;
+}
+
+.nutrition-icon {
+  font-size: 1.5rem;
+  margin-bottom: 2px;
+}
+
+.nutrition-value {
+  font-size: var(--font-size-md);
+  font-weight: 800;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.nutrition-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-light);
+}
+
+/* Contributions section */
+.breakdown-title {
+  font-size: var(--font-size-md);
+  font-weight: 800;
+  margin-bottom: var(--space-md);
+}
+
+.breakdown-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.breakdown-pill {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.breakdown-pill .recipe-name {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.breakdown-pill .recipe-meta {
+  font-size: 10px;
+  color: var(--color-text-light);
+  font-weight: 600;
+}
+
+.no-data {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-light);
+  font-style: italic;
+  width: 100%;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .nutrition-dashboard-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "daily"
+      "weekly"
+      "contrib";
+  }
+}
+
+/* ========================================
+   Recipe Editor Modern Styles
+   ======================================== */
+
+.editor-main {
+  padding-top: var(--space-2xl);
+  padding-bottom: var(--space-3xl);
+  max-width: 800px;
+}
+
+.editor-header-card {
+  margin-bottom: var(--space-2xl);
+  text-align: left;
+}
+
+.back-link-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--color-text-light);
+  font-weight: 600;
+  margin-bottom: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  width: fit-content;
+}
+
+.back-link-btn:hover {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.back-link-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.editor-card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--space-xl);
+  overflow: hidden;
+  transition: box-shadow var(--transition-base);
+}
+
+.editor-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.card-header {
+  padding: var(--space-lg) var(--space-xl);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.card-icon {
+  font-size: 1.5rem;
+}
+
+.card-title {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-text);
+}
+
+.card-content {
+  padding: var(--space-xl);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-lg);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.form-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.modern-input,
+.modern-textarea,
+.modern-select {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  border: 2px solid #E8F5E9;
+  background: #ffffff;
+  color: #1B4332;
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+}
+
+.modern-input:focus,
+.modern-textarea:focus,
+.modern-select:focus {
+  border-color: #2D6A4F;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(45, 106, 79, 0.1);
+}
+
+.modern-input::placeholder,
+.modern-textarea::placeholder {
+  color: #A8C6B9;
+}
+
+.modern-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper::after {
+  content: '▼';
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  color: #40916C;
+  pointer-events: none;
+}
+
+/* Dynamic Rows & Steps */
+.list-row {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  margin-bottom: var(--space-md);
+  animation: slideInEditor 0.3s ease;
+}
+
+.step-card {
+  background: #ffffff;
+  border: 2px solid #E8F5E9;
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  animation: slideInEditor 0.3s ease;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  background: #2D6A4F;
+  color: white;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 8px rgba(45, 106, 79, 0.2);
+}
+
+.add-row-btn-modern {
+  width: 100%;
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+  border: 2px dashed #B7D8C8;
+  background: rgba(255, 255, 255, 0.5);
+  color: #40916C;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  transition: all 0.2s ease;
+}
+
+.add-row-btn-modern:hover {
+  background: #ffffff;
+  border-color: #2D6A4F;
+  color: #2D6A4F;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Sticky Footer */
+.editor-footer {
+  margin-top: var(--space-3xl);
+  padding: var(--space-xl);
+  background: #ffffff;
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(45, 106, 79, 0.1);
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-lg);
+  position: sticky;
+  bottom: var(--space-lg);
+  z-index: 100;
+}
+
+.modern-btn {
+  padding: 14px 32px;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.modern-btn.primary {
+  background: #2D6A4F;
+  color: white;
+  box-shadow: 0 8px 20px rgba(45, 106, 79, 0.25);
+}
+
+.modern-btn.primary:hover {
+  background: #1B4332;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(45, 106, 79, 0.35);
+}
+
+.modern-btn.secondary {
+  background: transparent;
+  color: #40916C;
+  border: 2px solid transparent;
+}
+
+.modern-btn.secondary:hover {
+  background: rgba(45, 106, 79, 0.05);
+  color: #2D6A4F;
+}
+
+@keyframes slideInEditor {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .editor-footer {
+    flex-direction: column-reverse;
+    bottom: 0;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+
+  .modern-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.modern-input,
+.modern-textarea,
+.modern-select {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  border: 2px solid #E8F5E9;
+  background: #ffffff;
+  color: #1B4332;
+  font-family: inherit;
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+}
+
+.modern-input:focus,
+.modern-textarea:focus,
+.modern-select:focus {
+  border-color: #2D6A4F;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(45, 106, 79, 0.1);
+}
+
+.modern-input::placeholder,
+.modern-textarea::placeholder {
+  color: #A8C6B9;
+}
+
+.modern-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper::after {
+  content: '▼';
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  color: #40916C;
+  pointer-events: none;
+}
+
+/* Dynamic Rows & Steps */
+.list-row {
+  display: flex;
+  gap: var(--space-md);
+  align-items: center;
+  margin-bottom: var(--space-md);
+  animation: slideIn 0.3s ease;
+}
+
+.step-card {
+  background: #ffffff;
+  border: 2px solid #E8F5E9;
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  animation: slideIn 0.3s ease;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  background: #2D6A4F;
+  color: white;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 8px rgba(45, 106, 79, 0.2);
+}
+
+.add-row-btn-modern {
+  width: 100%;
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+  border: 2px dashed #B7D8C8;
+  background: rgba(255, 255, 255, 0.5);
+  color: #40916C;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  transition: all 0.2s ease;
+}
+
+.add-row-btn-modern:hover {
+  background: #ffffff;
+  border-color: #2D6A4F;
+  color: #2D6A4F;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Sticky Footer */
+.editor-footer {
+  margin-top: var(--space-3xl);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-lg);
+}
+
+.modern-btn {
+  padding: var(--space-md) var(--space-2xl);
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+}
+
+.modern-btn.primary {
+  background: var(--color-primary);
+  color: white;
+}
+
+.modern-btn.primary:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.modern-btn.secondary {
+  background: var(--color-bg-card);
+  border: 2px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.modern-btn.secondary:hover {
+  background: var(--color-bg);
+  border-color: var(--color-text);
+}
+
+@media (max-width: 600px) {
+  .editor-footer {
+    flex-direction: column-reverse;
+  }
+
+  .modern-btn {
+    width: 100%;
+  }
+
+  .card-content {
+    padding: var(--space-lg);
+  }
+}
+
+
+@media (max-width: 768px) {
+  .header-nav {
+    display: none;
+  }
+}
+
+/* ========================================
+   Recipe Editor Modern Styles - Refined
+   ======================================== */
+
+.editor-main {
+  padding-top: var(--space-2xl);
+  padding-bottom: var(--space-3xl);
+  max-width: 900px;
+  /* Slightly wider for better layout */
+}
+
+.editor-header-card {
+  margin-bottom: var(--space-2xl);
+  text-align: left;
+}
+
+#editorTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1B4332;
+  /* Deep green from image */
+  margin-bottom: var(--space-xs);
+}
+
+.editor-subtitle {
+  color: #40916C;
+  font-size: 1.1rem;
+  margin-bottom: var(--space-xl);
+}
+
+.editor-card {
+  background: #F7FFF7;
+  /* Very light green tint */
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(45, 106, 79, 0.1);
+  box-shadow: none;
+  /* Cleaner look */
+  margin-bottom: var(--space-2xl);
+  overflow: visible;
+  /* For better dropdowns/hints */
+}
+
+.card-header {
+  padding: var(--space-xl) var(--space-xl) var(--space-md);
+  background: transparent;
+  border-bottom: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.card-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #1B4332;
+  margin: 0;
+}
+
+.card-content {
+  padding: 0 var(--space-xl) var(--space-xl);
+}
+
+.field-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #40916C;
+  margin-bottom: 6px;
+}
+
+/* Specific Field Enhancements */
+.form-field.full-width {
+  grid-column: 1 / -1;
 }

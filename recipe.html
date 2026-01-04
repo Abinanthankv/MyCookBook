@@ -11,6 +11,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/common.js"></script>
 
     <!-- PWA Meta Tags -->
     <link rel="manifest" href="manifest.json">
@@ -19,12 +21,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Cookbook">
     <link rel="apple-touch-icon" href="icons/icon-192.png">
-
-    <!-- Styles -->
-    <link rel="stylesheet" href="css/styles.css">
-
-    <!-- Shared Logic (Theme Init) -->
-    <script src="js/common.js"></script>
 </head>
 
 <body>
@@ -40,7 +36,6 @@
                 <a href="index.html" class="nav-link">Recipes</a>
                 <a href="shopping.html" class="nav-link">Shopping List</a>
                 <a href="meal-plan.html" class="nav-link">Meal Plan</a>
-                <a href="import.html" class="nav-link">Import</a>
                 <a href="settings.html" class="nav-link">Settings</a>
             </nav>
         </div>
@@ -152,6 +147,10 @@
                         <button class="action-button primary" id="markCookedBtn">
                             <span class="icon">✅</span>
                             <span>I Made This!</span>
+                        </button>
+                        <button class="action-button secondary" id="editRecipeBtn" style="display: none;">
+                            <span class="icon">✏️</span>
+                            <span>Edit Recipe</span>
                         </button>
                         <div class="dropdown" id="collectionDropdown">
                             <button class="action-button secondary dropdown-toggle" id="addToCollectionBtn">
@@ -296,6 +295,28 @@
             </form>
         </div>
     </div>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🏠</span>
+            <span class="bottom-nav-label">Home</span>
+        </a>
+        <a href="shopping.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🛒</span>
+            <span class="bottom-nav-label">Shopping</span>
+        </a>
+        <a href="editor.html" class="bottom-nav-fab" title="Create New Recipe">
+            <div class="fab-circle">＋</div>
+        </a>
+        <a href="meal-plan.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">📅</span>
+            <span class="bottom-nav-label">Meal Plan</span>
+        </a>
+        <a href="settings.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">⚙️</span>
+            <span class="bottom-nav-label">Settings</span>
+        </a>
+    </nav>
 
     <!-- Scripts -->
     <script src="js/collections.js"></script>

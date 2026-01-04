@@ -9,6 +9,7 @@ const MealPlanUI = {
     init() {
         this.renderCalendar();
         this.renderPlannedMeals(this.selectedDate);
+        this.renderWeeklyDashboard();
         this.bindEvents();
     },
 
@@ -105,6 +106,141 @@ const MealPlanUI = {
             items.forEach(item => entries.push({ recipeId, ...item }));
         }
         return entries;
+    },
+
+    calculateWeeklyNutrition() {
+        const today = new Date();
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(today.getDate() - today.getDay());
+        startOfWeek.setHours(0, 0, 0, 0);
+
+        const totals = { calories: 0, protein: 0, carbs: 0 };
+        const contributorsMap = {};
+
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(startOfWeek);
+            date.setDate(startOfWeek.getDate() + i);
+            const dateStr = date.toISOString().split('T')[0];
+            const dayNutrition = this.getNutritionForDate(dateStr);
+
+            totals.calories += dayNutrition.totals.calories;
+            totals.protein += dayNutrition.totals.protein;
+            totals.carbs += dayNutrition.totals.carbs;
+
+            dayNutrition.contributors.forEach(c => {
+                if (!contributorsMap[c.id]) {
+                    contributorsMap[c.id] = { ...c };
+                } else {
+                    contributorsMap[c.id].count += c.count;
+                }
+            });
+        }
+
+        return { totals, contributors: Object.values(contributorsMap) };
+    },
+
+    getNutritionForDate(dateStr) {
+        const history = typeof CookHistory !== 'undefined' ? CookHistory.getAll() : {};
+        const plans = MealPlan.getForDate(dateStr);
+        const totals = { calories: 0, protein: 0, carbs: 0 };
+        const contributors = {};
+        const processedSlots = new Set();
+
+        const add = (recipeId, mealType) => {
+            const recipe = typeof getRecipeById !== 'undefined' ? getRecipeById(recipeId) : null;
+            const slotKey = `${dateStr}-${mealType}-${recipeId}`;
+            if (recipe && recipe.nutrition && !processedSlots.has(slotKey)) {
+                const parse = (v) => parseInt(String(v).replace(/\D/g, '')) || 0;
+                const c = parse(recipe.nutrition.calories);
+                const p = parse(recipe.nutrition.protein);
+                const cb = parse(recipe.nutrition.carbs);
+
+                totals.calories += c;
+                totals.protein += p;
+                totals.carbs += cb;
+
+                if (!contributors[recipe.id]) {
+                    contributors[recipe.id] = { id: recipe.id, title: recipe.title, count: 0, c, p };
+                }
+                contributors[recipe.id].count++;
+                processedSlots.add(slotKey);
+            }
+        };
+
+        const historical = this.getHistoricalEntriesForDate(dateStr, history);
+        historical.forEach(e => add(e.recipeId, e.meal));
+
+        for (const type in plans) {
+            plans[type].forEach(id => add(id, type));
+        }
+
+        return { totals, contributors: Object.values(contributors) };
+    },
+
+    renderWeeklyDashboard() {
+        const container = document.getElementById('nutritionDashboard');
+        if (!container) return;
+
+        const weekly = this.calculateWeeklyNutrition();
+        const daily = this.getNutritionForDate(this.selectedDate);
+
+        const goalsDaily = { calories: 2000, protein: 50, carbs: 275 };
+        const goalsWeekly = { calories: 2000 * 7, protein: 50 * 7, carbs: 275 * 7 };
+
+        container.innerHTML = `
+            <div class="nutrition-dashboard-grid">
+                <div class="nutrition-card daily">
+                    <div class="nutrition-card-header">
+                        <h2 class="section-title">Day Summary</h2>
+                        <span class="date-label">${new Date(this.selectedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                    </div>
+                    <div class="nutrition-stats-stack">
+                        ${this.renderStatItem('🔥 Calories', daily.totals.calories, goalsDaily.calories, 'calories', 'kcal')}
+                        ${this.renderStatItem('🍗 Protein', daily.totals.protein, goalsDaily.protein, 'protein', 'g')}
+                        ${this.renderStatItem('🍞 Carbs', daily.totals.carbs, goalsDaily.carbs, 'carbs', 'g')}
+                    </div>
+                </div>
+
+                <div class="nutrition-card weekly">
+                    <div class="nutrition-card-header">
+                        <h2 class="section-title">Weekly Summary</h2>
+                        <span class="week-label">This Week</span>
+                    </div>
+                    <div class="nutrition-stats-stack">
+                        ${this.renderStatItem('🔥 Calories', weekly.totals.calories, goalsWeekly.calories, 'calories', 'kcal')}
+                        ${this.renderStatItem('🍗 Protein', weekly.totals.protein, goalsWeekly.protein, 'protein', 'g')}
+                        ${this.renderStatItem('🍞 Carbs', weekly.totals.carbs, goalsWeekly.carbs, 'carbs', 'g')}
+                    </div>
+                </div>
+
+                <div class="nutrition-card contributions">
+                    <h3 class="breakdown-title">Receipe Contributions (Weekly)</h3>
+                    <div class="breakdown-grid">
+                        ${weekly.contributors.length > 0 ? weekly.contributors.map(r => `
+                            <div class="breakdown-pill">
+                                <span class="recipe-name">${r.title}</span>
+                                <span class="recipe-meta">${r.count}x • ${r.c * r.count}cal</span>
+                            </div>
+                        `).join('') : '<p class="no-data">Add recipes to your plan to see contributions</p>'}
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    renderStatItem(label, value, goal, cls, unit) {
+        const pct = Math.min(Math.round((value / goal) * 100), 100);
+        return `
+            <div class="stat-item">
+                <div class="stat-header">
+                    <span class="stat-label">${label}</span>
+                    <span class="stat-value">${value}/${goal} ${unit}</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill ${cls}" style="width: ${pct}%"></div>
+                </div>
+            </div>
+        `;
     },
 
     renderPlannedMeals(date) {
@@ -243,12 +379,14 @@ const MealPlanUI = {
         document.getElementById('recipePickerModal').classList.remove('active');
         this.renderPlannedMeals(date);
         this.renderCalendar();
+        this.renderWeeklyDashboard();
     },
 
     removePlan(date, mealType, recipeId) {
         MealPlan.removeRecipe(date, mealType, recipeId);
         this.renderPlannedMeals(date);
         this.renderCalendar();
+        this.renderWeeklyDashboard();
     }
 };
 

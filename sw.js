@@ -3,7 +3,7 @@
  * Provides offline caching for the cookbook application
  */
 
-const CACHE_NAME = 'cookbook-v4';
+const CACHE_NAME = 'cookbook-v6';
 
 // Get the base path dynamically (works for both localhost and GitHub Pages)
 const BASE_PATH = self.location.pathname.replace('/sw.js', '');
@@ -13,12 +13,13 @@ const STATIC_ASSETS = [
     './index.html',
     './recipe.html',
     './shopping.html',
-    './import.html',
+    './editor.html',
     './css/styles.css',
     './js/app.js',
     './js/recipe.js',
     './js/shopping.js',
-    './js/import.js',
+    './js/editor.js',
+    './js/common.js',
     './data/recipes.json',
     './icons/icon-192.png',
     './icons/icon-512.png'
@@ -56,6 +57,24 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
     // Skip non-GET requests
     if (event.request.method !== 'GET') return;
+
+    const url = new URL(event.request.url);
+
+    // Network First for recipes.json to ensure data is always fresh
+    if (url.pathname.endsWith('recipes.json')) {
+        event.respondWith(
+            fetch(event.request)
+                .then((response) => {
+                    const responseClone = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(event.request, responseClone);
+                    });
+                    return response;
+                })
+                .catch(() => caches.match(event.request))
+        );
+        return;
+    }
 
     // Skip external requests (like fonts, images from CDN)
     if (!event.request.url.startsWith(self.location.origin)) {

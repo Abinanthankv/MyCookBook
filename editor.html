@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Recipe | Cookbook</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/common.js"></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🍳</span>
+                <span>Cookbook</span>
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Recipes</a>
+                <a href="shopping.html" class="nav-link">Shopping List</a>
+                <a href="meal-plan.html" class="nav-link">Meal Plan</a>
+                <a href="settings.html" class="nav-link">Settings</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="editor-main container">
+        <div class="editor-header-card">
+            <button class="back-link-btn" id="headerBackBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                <span>Back</span>
+            </button>
+            <h1 id="editorTitle">Create New Recipe</h1>
+            <p class="editor-subtitle">Fill in the details below to add a custom recipe to your collection.</p>
+        </div>
+
+        <form id="recipeForm" class="recipe-editor-form">
+            <!-- Basic Info Section -->
+            <div class="editor-card">
+                <div class="card-header">
+                    <span class="card-icon">📄</span>
+                    <h2 class="card-title">Basic Information</h2>
+                </div>
+                <div class="card-content">
+                    <div class="form-grid">
+                        <div class="form-field full-width">
+                            <label for="title" class="field-label">RECIPE TITLE *</label>
+                            <input type="text" id="title" required placeholder="e.g. Grandma's Famous Lasagna"
+                                class="modern-input">
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="description" class="field-label">DESCRIPTION</label>
+                            <textarea id="description" rows="3" placeholder="Tell us about this dish..."
+                                class="modern-textarea"></textarea>
+                        </div>
+                        <div class="form-field">
+                            <label for="category" class="field-label">CATEGORY</label>
+                            <div class="select-wrapper">
+                                <select id="category" class="modern-select">
+                                    <option value="breakfast">🌅 Breakfast</option>
+                                    <option value="lunch">🥗 Lunch</option>
+                                    <option value="dinner" selected>🍽️ Dinner</option>
+                                    <option value="dessert">🍰 Dessert</option>
+                                    <option value="snack">🥨 Snack</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label for="difficulty" class="field-label">DIFFICULTY</label>
+                            <div class="select-wrapper">
+                                <select id="difficulty" class="modern-select">
+                                    <option value="easy">🟢 Easy</option>
+                                    <option value="medium" selected>🟡 Medium</option>
+                                    <option value="hard">🔴 Hard</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label for="servings" class="field-label">SERVINGS</label>
+                            <input type="number" id="servings" value="4" min="1" class="modern-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timing Section -->
+            <div class="editor-card">
+                <div class="card-header">
+                    <span class="card-icon">⏱️</span>
+                    <h2 class="card-title">Timing</h2>
+                </div>
+                <div class="card-content">
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <label for="prepTime" class="field-label">PREP TIME</label>
+                            <input type="text" id="prepTime" placeholder="e.g. 15 mins" class="modern-input">
+                        </div>
+                        <div class="form-field">
+                            <label for="cookTime" class="field-label">COOK TIME</label>
+                            <input type="text" id="cookTime" placeholder="e.g. 30 mins" class="modern-input">
+                        </div>
+                        <div class="form-field">
+                            <label for="totalTime" class="field-label">TOTAL TIME</label>
+                            <input type="text" id="totalTime" placeholder="e.g. 45 mins" class="modern-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Media Section -->
+            <div class="editor-card">
+                <div class="card-header">
+                    <span class="card-icon">🖼️</span>
+                    <h2 class="card-title">Media</h2>
+                </div>
+                <div class="card-content">
+                    <div class="form-grid">
+                        <div class="form-field full-width">
+                            <label for="image" class="field-label">IMAGE URL</label>
+                            <input type="url" id="image" placeholder="https://images.unsplash.com/..."
+                                class="modern-input">
+                            <p class="field-hint">Use a high-quality vertical image for best results.</p>
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="videoUrl" class="field-label">YOUTUBE URL (OPTIONAL)</label>
+                            <input type="url" id="videoUrl" placeholder="https://youtube.com/watch?v=..."
+                                class="modern-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ingredients Section -->
+            <div class="editor-card" id="ingredientsSection">
+                <div class="card-header">
+                    <span class="card-icon">🛒</span>
+                    <h2 class="card-title">Ingredients</h2>
+                </div>
+                <div class="card-content">
+                    <div id="ingredientsList" class="dynamic-rows">
+                        <!-- Dynamic Rows -->
+                    </div>
+                    <button type="button" class="add-row-btn-modern" id="addIngredientBtn">
+                        <span class="icon">＋</span>
+                        <span>Add Ingredient</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Steps Section -->
+            <div class="editor-card" id="stepsSection">
+                <div class="card-header">
+                    <span class="card-icon">👨‍🍳</span>
+                    <h2 class="card-title">Instructions</h2>
+                </div>
+                <div class="card-content">
+                    <div id="stepsList" class="dynamic-steps">
+                        <!-- Dynamic Rows -->
+                    </div>
+                    <button type="button" class="add-row-btn-modern" id="addStepBtn">
+                        <span class="icon">＋</span>
+                        <span>Add New Step</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Nutrition Section -->
+            <div class="editor-card">
+                <div class="card-header">
+                    <span class="card-icon">📊</span>
+                    <h2 class="card-title">Nutrition (Per Serving)</h2>
+                </div>
+                <div class="card-content">
+                    <div class="form-grid">
+                        <div class="form-field">
+                            <label for="calories" class="field-label">CALORIES</label>
+                            <input type="text" id="calories" placeholder="e.g. 450kcal" class="modern-input">
+                        </div>
+                        <div class="form-field">
+                            <label for="protein" class="field-label">PROTEIN</label>
+                            <input type="text" id="protein" placeholder="e.g. 25g" class="modern-input">
+                        </div>
+                        <div class="form-field">
+                            <label for="fat" class="field-label">FAT</label>
+                            <input type="text" id="fat" placeholder="e.g. 15g" class="modern-input">
+                        </div>
+                        <div class="form-field">
+                            <label for="carbs" class="field-label">CARBS</label>
+                            <input type="text" id="carbs" placeholder="e.g. 50g" class="modern-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="editor-footer">
+                <button type="button" class="modern-btn secondary" id="cancelBtn">Cancel & Exit</button>
+                <button type="submit" class="modern-btn primary" id="saveBtn">Save Recipe</button>
+            </div>
+        </form>
+    </main>
+
+    <nav class="bottom-nav">
+        <a href="index.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🏠</span>
+            <span class="bottom-nav-label">Home</span>
+        </a>
+        <a href="shopping.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">🛒</span>
+            <span class="bottom-nav-label">Shopping</span>
+        </a>
+        <a href="editor.html" class="bottom-nav-fab" title="Create New Recipe">
+            <div class="fab-circle">＋</div>
+        </a>
+        <a href="meal-plan.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">📅</span>
+            <span class="bottom-nav-label">Meal Plan</span>
+        </a>
+        <a href="settings.html" class="bottom-nav-item">
+            <span class="bottom-nav-icon">⚙️</span>
+            <span class="bottom-nav-label">Settings</span>
+        </a>
+    </nav>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <p class="footer-text">Made with ❤️ | <a href="https://github.com">View on GitHub</a></p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/import.js"></script>
+    <script src="js/editor.js"></script>
+</body>
+
+</html>

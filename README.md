@@ -38,8 +38,7 @@ cookbook/
 ├── index.html          # Discovery hub & recipe grid
 ├── recipe.html         # Interactive recipe details & video steps
 ├── shopping.html       # Dynamic shopping list manager
-├── import.html         # Data import/export (JSON)
-├── settings.html       # Theme selector & Live Color Editor
+├── settings.html       # Theme customization and data management (Import/Export)
 ├── collections.html    # Folder & collection management
 ├── css/
 │   └── styles.css      # Design system & Material 3 tokens
